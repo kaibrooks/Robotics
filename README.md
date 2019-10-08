@@ -1,6 +1,7 @@
 # Robotics
 -------------------------------------------------------
-* Policeperson and Thief
+* Police individual(Mice) and Thief(Cheese)
+* 
 * ECE578
 *
 *
