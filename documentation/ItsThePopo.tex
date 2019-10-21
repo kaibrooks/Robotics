@@ -1,0 +1,202 @@
+% ECE578 Project
+% Bliss Brass, Kai Brooks, Tyler Hull, Mikhail Mayers, Roman Minko
+% Fall 2019
+
+% Document settings ------------------------------------------------
+\documentclass[a4paper,12pt]{article}
+
+\newcommand{\figOverlay}{\put(34,10){\color{black!50} \figWatermark}} % Figure overlay settings
+\newcommand{\figWatermark}{}%\small Brooks \today} 		% Figure overlay text
+\newcommand{\figHere}{\begin{overpic}[percent,scale=0.34]}	% Settings for all figures
+
+\newcommand{\authorname}{Brass, Brooks, Hull, Mayers, Minko}
+\newcommand{\classnumber}{ECE578}
+\newcommand{\projectname}{El Queso Est\'{a} Solo}
+
+% Packages ------------------------------------------------
+
+\usepackage[USenglish]{babel} 	% American English
+\usepackage{blindtext}			% Generate latin crap
+\usepackage[yyyymmdd]{datetime} % Sets date format to ISO 8601 standard
+\renewcommand{\dateseparator}{-}% Sets date format to ISO 8601 standard
+
+\usepackage{graphicx}			% Image importing and display
+\graphicspath{ {images/} }		% Path to image folder
+\usepackage{xcolor}				% Allows normal color words
+\usepackage{color, colortbl}
+
+
+\usepackage{float}				% Adds 'H' for figure placement location
+\usepackage{enumitem}			% Use for QandA environment
+\usepackage{booktabs}			% Merging columns in tables
+
+\usepackage[firstpage]{draftwatermark}	% use [nostamp] when finished, [firstpage] otherwise
+\SetWatermarkText{DRAFT}
+\SetWatermarkColor{red!50}
+\SetWatermarkScale{3}
+
+
+\usepackage{overpic}				% Puts text over figures
+\usepackage[american]{circuitikz}	% American-style circuit diagrams
+
+\usepackage{amsmath}				% Multi-line equations
+\usepackage{caption}				% Equation caption formatting
+\usepackage{physics}				% Easier derivatives
+\usepackage{gensymb}				% Enable \degree for degree symbol
+\usepackage{siunitx}				% SI units
+
+
+\usepackage{array}					% Used for centering tabular data
+\newcolumntype{M}[1]{>{\centering\arraybackslash}p{#1}} % The actual centered column format
+
+\usepackage{listings} %For code in appendix
+
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{ltgray}{rgb}{0.937, 0.937, 0.956}	% Divide standard RGB values by 255 for some reason 
+
+% PSU colors
+\definecolor{PSUgreen}{RGB}{106,127,16}
+\definecolor{PSUltgreen}{RGB}{168,180,0}
+\definecolor{PSUblue}{RGB}{0,117,154}
+\definecolor{PSUltblue}{RGB}{161,216,224}
+\definecolor{PSUgray}{RGB}{71,67,52}
+\definecolor{PSUbrown}{RGB}{96,53,29}
+\definecolor{PSUsienna}{RGB}{163,63,31}
+\definecolor{PSUred}{RGB}{210,73,42}
+\definecolor{PSUorange}{RGB}{220,155,50}
+\definecolor{PSUyellow}{RGB}{230,220,143}
+\definecolor{PSUtan}{RGB}{232,221,162}
+\definecolor{PSUpurple}{RGB}{101,3,96}
+
+
+\newenvironment{QandA}
+	{\begin{enumerate}[label=\arabic*.]\sl} % Use slanted question text and Arabic numerals
+  {\end{enumerate}}
+\newenvironment{answered}{\par\normalfont}{} % Paragraph break and use normal font
+
+% fancy header / footer lines
+\usepackage{fancyhdr}% http://ctan.org/pkg/fancyhdr
+\pagestyle{fancy}% Change page style to fancy
+\fancyhf{}% Clear header/footer
+\fancyhead[L]{\textcolor{PSUgray}{\classnumber}}
+\fancyhead[R]{\textcolor{PSUgray}{\projectname}}
+\fancyfoot[L]{\textcolor{PSUgray}{\authorname}}
+\fancyfoot[R]{\textcolor{PSUgray}{\thepage}}
+\renewcommand{\headrulewidth}{0.4pt}% Default \headrulewidth is 0.4pt
+\renewcommand{\footrulewidth}{0.4pt}% Default \footrulewidth is 0pt
+
+
+% Title Page ------------------------------------------------
+\begin{document}
+\lstset { %Formatting for code in appendix
+  language=Matlab,
+  basicstyle=\footnotesize\ttfamily,
+  numbers=left,
+  stepnumber=1,
+  showstringspaces=false,
+  tabsize=1,
+  breaklines=true,
+  breakatwhitespace=false,
+  stringstyle=\color{mymauve},
+  keywordstyle=\color{blue},
+  commentstyle=\color{mygreen}, 
+}
+
+\begin{titlepage}
+	\begin{center}
+		\vspace*{1cm}
+
+		\huge\textsc{\projectname}
+
+		\vspace{0.5cm}
+		\small\textsc{\classnumber}
+		
+		\vspace{1.5cm}
+		\normalsize \authorname 
+		
+		\vspace{0.5cm}
+		%Lab TA: N/A
+		
+		\vfill
+		\vspace{0.8cm}
+		
+		\includegraphics[width=0.5\textwidth]{images/psulogo_horiz_msword.tif}
+		
+		\vspace{0.5cm}
+		Electrical and Computer Engineering\\
+		Portland State University\\
+		\today
+		 
+	\end{center}
+\end{titlepage}
+
+% Table of contents ------------------------------------------------
+\newpage
+\tableofcontents
+
+
+% Begin paper ------------------------------------------------
+\newpage
+\pagenumbering{arabic}
+
+\section{Overview}
+The purpose of this lab is to do a thing.
+
+
+Math me
+\begin{align}
+\begin{split}\label{eq:1}
+	c_{max} &={} \SI{5.93085}{\volt} - \SI{5}{\volt} \\
+	c_{max} &={} \SI{0.93085}{\volt}
+\end{split}
+\end{align}
+
+\begin{align}
+\begin{split}\label{eq:2}
+	c_{final} &= \SI{5.5}{\volt} - \SI{5}{\volt} \\
+	c_{final} &= \SI{0.5}{\volt}
+\end{split}	
+\end{align} 
+
+\section{Another Section}
+	\subsection{Diagram}
+	\begin{figure}[H]	 		
+		\centering
+	  	\label{fig:}
+	  	\figHere{images/kitty.jpg} \figOverlay
+	  	\end{overpic}
+	  	\caption{nyaaaaan}
+	\end{figure}
+
+	\subsection{Analysis}
+	\begin{table}[H]
+	\centering
+		\begin{tabular}{|M{.5\textwidth}|M{.5\textwidth}|} % Col width
+		\hline
+		\textbf{Header 1} & \textbf{Header 2} \\ \hline
+		Cell 1 & Cell 2 \\ \hline
+		\end{tabular}						
+		\caption{A Sweet Table}	
+	\end{table}
+	
+	\begin{QandA}
+
+	\section{Q \& A}
+	\item How does it work?
+		\begin{answered}
+			Black magic	
+		\end{answered}
+
+	\end{QandA}	
+	
+	\section{MATLAB Code of Mathematical Analysis}
+	\lstinputlisting[language=Matlab]{code/simGame.m}
+
+	\section{Python Code for A Thing}
+	\lstinputlisting[language=Python]{code/main.py}
+
+	
+
+\end{document}
