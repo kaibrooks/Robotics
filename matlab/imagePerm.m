@@ -39,7 +39,7 @@ imCenter = [width/2 height/2];
 
 while i < makeImages
     adjFactor = rand();
-    alg = randi(6);
+    alg = randi(7); % keep between 1 and 5 to disallow black and white
     filts = filts + 1;
     
     switch alg
@@ -66,14 +66,15 @@ while i < makeImages
         case 4 % make fuzzy
             temp = imnoise(im,'gaussian',0.0,adjFactor*fuzz*WEIRDNESS);
             
-        case 5 % make b&w and increase contrast
+        case 5 % change contrast
+            temp = imadjust(im,[.1 .2 0; .8*WEIRDNESS .9*WEIRDNESS 1],[]);    
+            
+        case 6 % make b&w and increase contrast
             temp = imadjust(rgb2gray(im),[0.1 0.9],[]);
             
-        case 6 % denoise (must be b&w)
-            temp = wiener2(rgb2gray(im),[5 5]);
-            
-        case 7 % change contrast
-            temp = imadjust(im,[.1 .2 0; .8*WEIRDNESS .9*WEIRDNESS 1],[]);
+        case 7 % denoise (must be b&w)
+            amount = randi(4)+2;
+            temp = wiener2(rgb2gray(im),[amount amount]);
               
         case 8 % adjust HSV
             adjFactor = adjFactor;
