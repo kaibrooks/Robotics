@@ -10,11 +10,10 @@ close all
 clear all
 rng('shuffle')
 
-makeImages = 50;
+makeImages = 500;
 termChance = 0.5; % 0 for ~ ~ ~ w a r h o l m o d e ~ ~ ~
 
 cat = imread('images/cat.jpg');
-I = imread('images/cat.jpg');
 %imshow(cat)
 
 im = cat;
@@ -26,23 +25,23 @@ imCenter = [width/2 height/2];
 
 while i < makeImages
     adjFactor = rand();
-    alg = randi(4);
+    alg = randi(6);
     
     switch alg
-        case 8 % make b&w
+        case 5 % make b&w
             temp = rgb2gray(im);
             
-        case 2 % make fuzzy
-            temp = imnoise(im,'gaussian',0.0,adjFactor/2);
+        case 4 % make fuzzy
+            temp = imnoise(im,'gaussian',0.0,adjFactor*0.1);
       
         case 1 % flip
             temp = flipdim(im, 2);           % horizontal flip
             
-        case 3 % change contrast
-            temp = imadjust(im,[.2 .3 0; .6 .7 1],[]);
+        case 2 % change contrast
+            temp = imadjust(im,[.1 .2 0; .8 .9 1],[]);
    
-        case 4 % rotate
-            temp = imrotate(im,randi([1 90]));
+        case 3 % rotate
+            temp = imrotate(im,randi([1 ceil(adjFactor*90)]),'crop');
             
               
         case 8 % adjust HSV
@@ -50,28 +49,28 @@ while i < makeImages
             temp = rgb2hsv(im);
             temp(:, :, 2) = temp(:, :, 2) * adjFactor;
             
-        case 8 % denoise (must be b&w)
-            temp = wiener2(rgb2gray(imnoise(im,'gaussian',0.0,adjFactor/2)),[5 5]);
+        case 6 % denoise (must be b&w)
+            temp = wiener2(rgb2gray(im),[5 5]);
             
     end % switch
     
     % crop it
-    
     [newH, newW, colorSpace] = size(temp); % get width / height
-    imCenter = [newW/2 newH/2];
-    cropRect = [(newW/2)-(width/2) newH/2-(height/2) width height]; % xmin ymin width height
+    imXY = [(newW/2)-(width/2) newH/2-(height/2)];
+    cropRect = [[imXY] width height]; % xmin ymin width height
 
-    
-    
-    temp = imcrop(temp,cropRect);
-    %temp = centerCropWindow2d(size(I),targetSize);
+    %temp = imcrop(temp,cropRect);
     
     imshow(temp);
-    saveas(gcf,'images/temp.jpg', 'jpg')
+    f=getframe;
+    imwrite(f.cdata,'images/temp.jpg');
+    %saveas(gcf,'images/temp.jpg', 'jpg')
     
     % write image and move on to next
     if rand() < termChance
-        saveas(gcf,'images/1.jpg', 'jpg')        
+        f=getframe;
+        imwrite(f.cdata,'images/1.jpg');
+        %saveas(gcf,'images/1.jpg', 'jpg')        
         i = i + 1;
         fprintf("Image %i created using %i\n",i, alg)
         im = cat;
