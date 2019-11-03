@@ -5,37 +5,59 @@
 %
 % takes an image and makes a bunch of permutations of it for training an image recognition algorithm
 
-clc
-close all
-clear all
-rng('shuffle')
+clc; close all; clear all; rng('shuffle');
 
-% user settings ------------------------------------------------
+% user settings -----------------------------------------------------------
 
 makeImages = 20; % (20) images to make
-termChance = 0.4; % (0.4) 0 for ~ ~ ~ w a r h o l m o d e ~ ~ ~
+repeatProb = 0.4; % (0.4) probability an image goes back through filtering again
 maxAngle = 45; % (45) max angle rotations will make
 fuzz = 0.1; % (0.1) fuzz in noise
 
+randomizeFilenames = 0; % randomizes filename prefixes so sequential runs (probably) don't overwrite each other
+deleteExistingFiles = 0; % deletes previous output before saving new run
 WEIRDNESS = 1; % (0.3-1.0) beeeeewaaaaaaaaaree
+
 
 % image to load in
 cat = imread('images/cat.jpg');
 
-% other vars ---------------------------------------------
+% other vars (no touch) ---------------------------------------------------
 
 rotated = 0;
 flipped = 0;
 filts = 0;
+cont = '';
 
-% go ----------------------------------------------------------------
+prefix = randi([100 999]); % used if randomizedFilenames            
 
-im = cat;
+% go ----------------------------------------------------------------------
 
-% get details about it
-%imhist(cat)
-[height, width, colorSpace] = size(im);
-imCenter = [width/2 height/2];
+
+theFiles = dir(fullfile('images/output/', '*.jpg'));
+
+if deleteExistingFiles % delete previous files
+    for k = 1 : length(theFiles)
+        baseFileName = theFiles(k).name;
+        fullFileName = fullfile('images/output/', baseFileName);
+        fprintf(1, 'Deleting %s\n', fullFileName);
+        delete(fullFileName);
+    end
+end
+
+% check if data exists and ask to overwrite
+
+if size(theFiles) > 0;
+    cont = input('Files already exist and may be overwritten. Y to continue: ','s');
+    if upper(cont) ~= "Y"
+        fprintf('End\n')
+        return
+    end 
+end
+
+fprintf('Starting...\n');
+
+im = cat; % set to base image
 
 while i < makeImages
     adjFactor = rand();
@@ -80,47 +102,40 @@ while i < makeImages
             adjFactor = adjFactor;
             temp = rgb2hsv(im);
             temp(:, :, 2) = temp(:, :, 2) * adjFactor;
-            
-            
-            
+
     end % switch
-    
-    % crop it
-    [newH, newW, colorSpace] = size(temp); % get width / height
-    imXY = [(newW/2)-(width/2) newH/2-(height/2)];
-    cropRect = [[imXY] width height]; % xmin ymin width height
-    
-    %temp = imcrop(temp,cropRect);
-    
+       
     imshow(temp);
     f=getframe;
     imwrite(f.cdata,'images/temp.png');
-    %saveas(gcf,'images/temp.jpg', 'jpg')
     
     % write image and move on to next
-    if rand() < termChance
+    if rand() > repeatProb
         
         % write file
-        f=getframe;
-        padded = sprintf( '%03d',i); % add trailing zeroes to filename
+        if randomizeFilenames
+            padded = sprintf( '%i%03d',prefix,i); % prefix and add trailing zeroes
+        else
+        padded = sprintf( '%03d',i); % add padded zeroes to filename
+        end
+        
+        
         filename = sprintf('images/output/%s.jpg', padded);
         imwrite(f.cdata, filename);
         
         fprintf("Image %s created with %i filters\n",padded, filts)
         
         % reset for next run
-        filts = 0;
-        i = i + 1;
-        im = cat;
+        im = cat; % rest to base image
         rotated = 0;
         flipped = 0;
+        filts = 0;
+        i = i + 1;
     else
         %fprintf("Looping after applying %i\n", alg)
         im = imread('images/temp.png');
-    end
-    
-    
-    
+    end % if termChance
+
 end % 1:makeImages
 
 fprintf('Done\n');
