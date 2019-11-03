@@ -12,15 +12,21 @@ rng('shuffle')
 
 % user settings ------------------------------------------------
 
-makeImages = 500; % (20) images to make
-termChance = 0.2; % (0.4) 0 for ~ ~ ~ w a r h o l m o d e ~ ~ ~
-maxAngle = 90; % (90) max angle rotations will make
+makeImages = 20; % (20) images to make
+termChance = 0.4; % (0.4) 0 for ~ ~ ~ w a r h o l m o d e ~ ~ ~
+maxAngle = 45; % (45) max angle rotations will make
 fuzz = 0.1; % (0.1) fuzz in noise
 
 WEIRDNESS = 1; % (0.3-1.0) beeeeewaaaaaaaaaree
 
 % image to load in
 cat = imread('images/cat.jpg');
+
+% other vars ---------------------------------------------
+
+rotated = 0;
+flipped = 0;
+filts = 0;
 
 % go ----------------------------------------------------------------
 
@@ -34,31 +40,47 @@ imCenter = [width/2 height/2];
 while i < makeImages
     adjFactor = rand();
     alg = randi(6);
+    filts = filts + 1;
     
     switch alg
-        case 5 % make b&w
-            temp = rgb2gray(im);
+        
+        case 1 % flip
+            if flipped
+                continue
+            end
+            temp = flipdim(im, 2);           % horizontal flip
+            
+        case 2 % flip again for more probability
+            if flipped
+                continue
+            end
+            temp = flipdim(im, 2);           % horizontal flip
+            
+        case 3 % rotate
+            if rotated
+                continue
+            end
+            temp = imrotate(im,randi([1 maxAngle]),'crop');
+            rotated = 1;
             
         case 4 % make fuzzy
             temp = imnoise(im,'gaussian',0.0,adjFactor*fuzz*WEIRDNESS);
-      
-        case 1 % flip
-            temp = flipdim(im, 2);           % horizontal flip
             
-        case 2 % change contrast
+        case 5 % make b&w and increase contrast
+            temp = imadjust(rgb2gray(im),[0.1 0.9],[]);
+            
+        case 6 % denoise (must be b&w)
+            temp = wiener2(rgb2gray(im),[5 5]);
+            
+        case 7 % change contrast
             temp = imadjust(im,[.1 .2 0; .8*WEIRDNESS .9*WEIRDNESS 1],[]);
-   
-        case 3 % rotate
-            temp = imrotate(im,randi([1 maxAngle]),'crop');
-            
               
         case 8 % adjust HSV
             adjFactor = adjFactor;
             temp = rgb2hsv(im);
             temp(:, :, 2) = temp(:, :, 2) * adjFactor;
             
-        case 6 % denoise (must be b&w)
-            temp = wiener2(rgb2gray(im),[5 5]);
+            
             
     end % switch
     
@@ -66,27 +88,38 @@ while i < makeImages
     [newH, newW, colorSpace] = size(temp); % get width / height
     imXY = [(newW/2)-(width/2) newH/2-(height/2)];
     cropRect = [[imXY] width height]; % xmin ymin width height
-
+    
     %temp = imcrop(temp,cropRect);
     
     imshow(temp);
     f=getframe;
-    imwrite(f.cdata,'images/temp.jpg');
+    imwrite(f.cdata,'images/temp.png');
     %saveas(gcf,'images/temp.jpg', 'jpg')
     
     % write image and move on to next
     if rand() < termChance
+        
+        % write file
         f=getframe;
-        imwrite(f.cdata,'images/1.jpg');
-        %saveas(gcf,'images/1.jpg', 'jpg')        
+        padded = sprintf( '%03d',i); % add trailing zeroes to filename
+        filename = sprintf('images/output/%s.jpg', padded);
+        imwrite(f.cdata, filename);
+        
+        fprintf("Image %s created with %i filters\n",padded, filts)
+        
+        % reset for next run
+        filts = 0;
         i = i + 1;
-        fprintf("Image %i created using %i\n",i, alg)
         im = cat;
+        rotated = 0;
+        flipped = 0;
     else
-       fprintf("Looping after %i\n", alg)
-       im = imread('images/temp.jpg'); 
+        %fprintf("Looping after applying %i\n", alg)
+        im = imread('images/temp.png');
     end
     
     
     
 end % 1:makeImages
+
+fprintf('Done\n');
