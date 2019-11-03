@@ -10,11 +10,19 @@ close all
 clear all
 rng('shuffle')
 
-makeImages = 500;
-termChance = 0.5; % 0 for ~ ~ ~ w a r h o l m o d e ~ ~ ~
+% user settings ------------------------------------------------
 
+makeImages = 500; % (20) images to make
+termChance = 0.2; % (0.4) 0 for ~ ~ ~ w a r h o l m o d e ~ ~ ~
+maxAngle = 90; % (90) max angle rotations will make
+fuzz = 0.1; % (0.1) fuzz in noise
+
+WEIRDNESS = 1; % (0.3-1.0) beeeeewaaaaaaaaaree
+
+% image to load in
 cat = imread('images/cat.jpg');
-%imshow(cat)
+
+% go ----------------------------------------------------------------
 
 im = cat;
 
@@ -32,16 +40,16 @@ while i < makeImages
             temp = rgb2gray(im);
             
         case 4 % make fuzzy
-            temp = imnoise(im,'gaussian',0.0,adjFactor*0.1);
+            temp = imnoise(im,'gaussian',0.0,adjFactor*fuzz*WEIRDNESS);
       
         case 1 % flip
             temp = flipdim(im, 2);           % horizontal flip
             
         case 2 % change contrast
-            temp = imadjust(im,[.1 .2 0; .8 .9 1],[]);
+            temp = imadjust(im,[.1 .2 0; .8*WEIRDNESS .9*WEIRDNESS 1],[]);
    
         case 3 % rotate
-            temp = imrotate(im,randi([1 ceil(adjFactor*90)]),'crop');
+            temp = imrotate(im,randi([1 maxAngle]),'crop');
             
               
         case 8 % adjust HSV
