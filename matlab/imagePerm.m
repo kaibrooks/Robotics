@@ -15,9 +15,9 @@ clc; close all; clear all; rng('shuffle');
 
 % user settings -----------------------------------------------------------
 
-makeImages = 20; % (20) images to make
-repeatProb = 0.4; % (0.4) probability an image goes back through filtering again
-maxAngle = 45; % (45) max angle rotations will make
+makeImages = 10; % (10) permutations of each image to make
+repeatProb = 0.3; % (0.3) probability an image goes back through filtering again
+maxAngle = 30; % (30) max angle rotations will make
 fuzz = 0.1; % (0.1) fuzz in noise
 
 deleteExistingFiles = 1; % deletes previous output before saving new run
@@ -145,7 +145,6 @@ for j = 1:length(getImages)
             fprintf("Image %s created with %i filters\n",padded, filts)
             
             % reset for next run
-            im = cat; % rest to base image
             rotated = 0;
             flipped = 0;
             filts = 0;
