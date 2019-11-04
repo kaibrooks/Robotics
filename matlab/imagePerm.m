@@ -2,6 +2,7 @@
 % Kai Brooks
 % github.com/kaibrooks
 % 2019
+% MATLAB R2018a
 %
 % takes an image and makes a bunch of permutations of it for training an image recognition algorithm
 
@@ -14,13 +15,11 @@ repeatProb = 0.4; % (0.4) probability an image goes back through filtering again
 maxAngle = 45; % (45) max angle rotations will make
 fuzz = 0.1; % (0.1) fuzz in noise
 
-randomizeFilenames = 0; % randomizes filename prefixes so sequential runs (probably) don't overwrite each other
+randomizeFilenames = 0; % use this for multple runs back-to-back. randomizes filename prefixes so sequential runs (probably) don't overwrite each other
 deleteExistingFiles = 0; % deletes previous output before saving new run
-WEIRDNESS = 1; % (0.3-1.0) beeeeewaaaaaaaaaree
-
 
 % image to load in
-cat = imread('images/cat.jpg');
+cat = imread('images/cat2.jpg');
 
 % other vars (no touch) ---------------------------------------------------
 
@@ -46,7 +45,6 @@ if deleteExistingFiles % delete previous files
 end
 
 % check if data exists and ask to overwrite
-
 if size(theFiles) > 0;
     cont = input('Files already exist and may be overwritten. Y to continue: ','s');
     if upper(cont) ~= "Y"
@@ -86,10 +84,10 @@ while i < makeImages
             rotated = 1;
             
         case 4 % make fuzzy
-            temp = imnoise(im,'gaussian',0.0,adjFactor*fuzz*WEIRDNESS);
+            temp = imnoise(im,'gaussian',0.0,adjFactor*fuzz);
             
         case 5 % change contrast
-            temp = imadjust(im,[.1 .2 0; .8*WEIRDNESS .9*WEIRDNESS 1],[]);    
+            temp = imadjust(im,[.1 .2 0; .8 .9 1],[]);    
             
         case 6 % make b&w and increase contrast
             temp = imadjust(rgb2gray(im),[0.1 0.9],[]);
