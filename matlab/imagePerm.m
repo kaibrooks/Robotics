@@ -20,11 +20,7 @@ repeatProb = 0.4; % (0.4) probability an image goes back through filtering again
 maxAngle = 45; % (45) max angle rotations will make
 fuzz = 0.1; % (0.1) fuzz in noise
 
-randomizeFilenames = 0; % use this for multple runs back-to-back. randomizes filename prefixes so sequential runs (probably) don't overwrite each other
 deleteExistingFiles = 1; % deletes previous output before saving new run
-
-% image to load in
-cat = imread('images/training/wc00001.jpg');
 
 % other vars (no touch) ---------------------------------------------------
 
@@ -33,10 +29,7 @@ flipped = 0;
 filts = 0;
 cont = '';
 
-prefix = randi([100 999]); % used if randomizedFilenames
-
 % go ----------------------------------------------------------------------
-
 
 % check for older data
 oldFiles = dir(fullfile('images/output/', '*.jpg')); % existing output from previous runs
@@ -59,13 +52,17 @@ if size(oldFiles) > 0;
     end
 end
 
-fprintf('Starting...\n');
-
 % get contents of training folder
 getImages = dir(fullfile('images/training/', '*.jpg'));
 getTxts = dir(fullfile('images/training/', '*.txt'));
 
-% warning if there isn't a matching txt for each image
+% end if training folder is empty or unreadable
+if length(getImages) == 0
+    fprintf('No .jpg images in images/training/\nEnd\n')
+    return
+end
+
+% warn if there isn't a matching txt for each image
 if length(getImages) ~= length(getTxts)
     prompt = sprintf('Warning: Unequal images and texts in training (%i images, %i txts). Y to continue: ',length(getImages),length(getTxts));
     cont = input(prompt,'s');
@@ -75,16 +72,15 @@ if length(getImages) ~= length(getTxts)
     end
 end
 
-%im = cat; % set to base image
+% actual loop start
+fprintf('Starting...\n');
 for j = 1:length(getImages)
     
     % get image
     im = imread(fullfile('images/training/', getImages(j).name));
     
-    % get filename of image
-    outputName = erase(getImages(j).name,'.jpg');
-    
-    
+    % get filename of image to prefix output permutations
+    outputPrefix = erase(getImages(j).name,'.jpg');
     
     while i < makeImages
         adjFactor = rand();
@@ -141,7 +137,7 @@ for j = 1:length(getImages)
             
             % write file
             
-            padded = sprintf( '%s_%03d',outputName,i); % prefix and add trailing zeroes
+            padded = sprintf( '%s_%03d',outputPrefix,i); % prefix and add trailing zeroes
             
             filename = sprintf('images/output/%s.jpg', padded);
             imwrite(f.cdata, filename);
@@ -160,7 +156,7 @@ for j = 1:length(getImages)
         end % if termChance
         
     end % 1:makeImages
-    fprintf('Image %s finished\n',outputName)
+    fprintf('Image %s finished\n',outputPrefix)
     i = 0;
 end % 1:length(getImages)
 
