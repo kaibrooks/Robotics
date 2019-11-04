@@ -5,6 +5,11 @@
 % MATLAB R2018a
 %
 % takes an image and makes a bunch of permutations of it for training an image recognition algorithm
+%
+% folder structure must be:
+% (base dir)/images/training    for the input (training data) files
+% (base dir)/images/output      for the output (permutated) files
+% images must be .jpg
 
 clc; close all; clear all; rng('shuffle');
 
@@ -19,7 +24,7 @@ randomizeFilenames = 0; % use this for multple runs back-to-back. randomizes fil
 deleteExistingFiles = 1; % deletes previous output before saving new run
 
 % image to load in
-cat = imread('images/cat2.jpg');
+cat = imread('images/training/wc00001.jpg');
 
 % other vars (no touch) ---------------------------------------------------
 
@@ -28,113 +33,135 @@ flipped = 0;
 filts = 0;
 cont = '';
 
-prefix = randi([100 999]); % used if randomizedFilenames            
+prefix = randi([100 999]); % used if randomizedFilenames
 
 % go ----------------------------------------------------------------------
 
 
-theFiles = dir(fullfile('images/output/', '*.jpg'));
-
+% check for older data
+oldFiles = dir(fullfile('images/output/', '*.jpg')); % existing output from previous runs
 if deleteExistingFiles % delete previous files
-    for k = 1 : length(theFiles)
-        baseFileName = theFiles(k).name;
+    for k = 1 : length(oldFiles)
+        baseFileName = oldFiles(k).name;
         fullFileName = fullfile('images/output/', baseFileName);
         fprintf(1, 'Deleting %s\n', fullFileName);
         delete(fullFileName);
     end
-    theFiles = dir(fullfile('images/output/', '*.jpg'));
+    oldFiles = dir(fullfile('images/output/', '*.jpg'));
 end
 
 % check if data exists and ask to overwrite
-if size(theFiles) > 0;
+if size(oldFiles) > 0;
     cont = input('Files already exist and may be overwritten. Y to continue: ','s');
     if upper(cont) ~= "Y"
         fprintf('End\n')
         return
-    end 
+    end
 end
 
 fprintf('Starting...\n');
 
-im = cat; % set to base image
+% get contents of training folder
+getImages = dir(fullfile('images/training/', '*.jpg'));
+getTxts = dir(fullfile('images/training/', '*.txt'));
 
-while i < makeImages
-    adjFactor = rand();
-    alg = randi(7); % keep between 1 and 5 to disallow black and white
-    filts = filts + 1;
-    
-    switch alg
-        
-        case 1 % flip
-            if flipped
-                continue
-            end
-            temp = flipdim(im, 2);           % horizontal flip
-            
-        case 2 % flip again for more probability
-            if flipped
-                continue
-            end
-            temp = flipdim(im, 2);           % horizontal flip
-            
-        case 3 % rotate
-            if rotated
-                continue
-            end
-            temp = imrotate(im,randi([1 maxAngle]),'crop');
-            rotated = 1;
-            
-        case 4 % make fuzzy
-            temp = imnoise(im,'gaussian',0.0,adjFactor*fuzz);
-            
-        case 5 % change contrast
-            temp = imadjust(im,[.1 .2 0; .8 .9 1],[]);    
-            
-        case 6 % make b&w and increase contrast
-            temp = imadjust(rgb2gray(im),[0.1 0.9],[]);
-            
-        case 7 % denoise (must be b&w)
-            amount = randi(4)+2;
-            temp = wiener2(rgb2gray(im),[amount amount]);
-              
-        case 8 % adjust HSV
-            adjFactor = adjFactor;
-            temp = rgb2hsv(im);
-            temp(:, :, 2) = temp(:, :, 2) * adjFactor;
+% warning if there isn't a matching txt for each image
+if length(getImages) ~= length(getTxts)
+    prompt = sprintf('Warning: Unequal images and texts in training (%i images, %i txts). Y to continue: ',length(getImages),length(getTxts));
+    cont = input(prompt,'s');
+    if upper(cont) ~= "Y"
+        fprintf('End\n')
+        return
+    end
+end
 
-    end % switch
-       
-    imshow(temp);
-    f=getframe;
-    imwrite(f.cdata,'images/temp.png');
+%im = cat; % set to base image
+for j = 1:length(getImages)
     
-    % write image and move on to next
-    if rand() > repeatProb
+    % get image
+    im = imread(fullfile('images/training/', getImages(j).name));
+    
+    % get filename of image
+    outputName = erase(getImages(j).name,'.jpg');
+    
+    
+    
+    while i < makeImages
+        adjFactor = rand();
+        alg = randi(7); % keep between 1 and 5 to disallow black and white
+        filts = filts + 1;
         
-        % write file
-        if randomizeFilenames
-            padded = sprintf( '%i%03d',prefix,i); % prefix and add trailing zeroes
+        switch alg
+            
+            case 1 % flip
+                if flipped
+                    continue
+                end
+                temp = flipdim(im, 2);           % horizontal flip
+                
+            case 2 % flip again for more probability
+                if flipped
+                    continue
+                end
+                temp = flipdim(im, 2);           % horizontal flip
+                
+            case 3 % rotate
+                if rotated
+                    continue
+                end
+                temp = imrotate(im,randi([1 maxAngle]),'crop');
+                rotated = 1;
+                
+            case 4 % make fuzzy
+                temp = imnoise(im,'gaussian',0.0,adjFactor*fuzz);
+                
+            case 5 % change contrast
+                temp = imadjust(im,[.1 .2 0; .8 .9 1],[]);
+                
+            case 6 % make b&w and increase contrast
+                temp = imadjust(rgb2gray(im),[0.1 0.9],[]);
+                
+            case 7 % denoise (must be b&w)
+                amount = randi(4)+2;
+                temp = wiener2(rgb2gray(im),[amount amount]);
+                
+            case 8 % adjust HSV
+                adjFactor = adjFactor;
+                temp = rgb2hsv(im);
+                temp(:, :, 2) = temp(:, :, 2) * adjFactor;
+                
+        end % switch
+        
+        imshow(temp);
+        f=getframe;
+        imwrite(f.cdata,'images/temp.png');
+        
+        % write image and move on to next
+        if rand() > repeatProb
+            
+            % write file
+            
+            padded = sprintf( '%s_%03d',outputName,i); % prefix and add trailing zeroes
+            
+            filename = sprintf('images/output/%s.jpg', padded);
+            imwrite(f.cdata, filename);
+            
+            fprintf("Image %s created with %i filters\n",padded, filts)
+            
+            % reset for next run
+            im = cat; % rest to base image
+            rotated = 0;
+            flipped = 0;
+            filts = 0;
+            i = i + 1;
         else
-        padded = sprintf( '%03d',i); % add padded zeroes to filename
-        end
+            %fprintf("Looping after applying %i\n", alg)
+            im = imread('images/temp.png');
+        end % if termChance
         
-        
-        filename = sprintf('images/output/%s.jpg', padded);
-        imwrite(f.cdata, filename);
-        
-        fprintf("Image %s created with %i filters\n",padded, filts)
-        
-        % reset for next run
-        im = cat; % rest to base image
-        rotated = 0;
-        flipped = 0;
-        filts = 0;
-        i = i + 1;
-    else
-        %fprintf("Looping after applying %i\n", alg)
-        im = imread('images/temp.png');
-    end % if termChance
-
-end % 1:makeImages
+    end % 1:makeImages
+    fprintf('Image %s finished\n',outputName)
+    i = 0;
+end % 1:length(getImages)
 
 fprintf('Done\n');
