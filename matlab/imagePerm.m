@@ -16,7 +16,7 @@ maxAngle = 45; % (45) max angle rotations will make
 fuzz = 0.1; % (0.1) fuzz in noise
 
 randomizeFilenames = 0; % use this for multple runs back-to-back. randomizes filename prefixes so sequential runs (probably) don't overwrite each other
-deleteExistingFiles = 0; % deletes previous output before saving new run
+deleteExistingFiles = 1; % deletes previous output before saving new run
 
 % image to load in
 cat = imread('images/cat2.jpg');
@@ -42,6 +42,7 @@ if deleteExistingFiles % delete previous files
         fprintf(1, 'Deleting %s\n', fullFileName);
         delete(fullFileName);
     end
+    theFiles = dir(fullfile('images/output/', '*.jpg'));
 end
 
 % check if data exists and ask to overwrite
