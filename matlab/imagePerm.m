@@ -31,7 +31,7 @@ cont = '';
 % go ----------------------------------------------------------------------
 
 % check for older data
-oldFiles = dir(fullfile('images/output/', '*.jpg')); % existing output from previous runs
+oldFiles = dir(fullfile('images/output/', '*')); % existing output from previous runs
 if deleteExistingFiles % delete previous files
     for k = 1 : length(oldFiles)
         baseFileName = oldFiles(k).name;
@@ -40,7 +40,7 @@ if deleteExistingFiles % delete previous files
         delete(fullFileName);
     end
     fprintf('Deleted %i files\n',length(oldFiles))
-    oldFiles = dir(fullfile('images/output/', '*.jpg')); 
+    oldFiles = dir(fullfile('images/output/', '*.jpg'));
 end
 
 % check if data exists and ask to overwrite
@@ -147,6 +147,15 @@ for j = 1:length(getImages)
             else
                 fprintf("Image %s created with %i filter\n",padded, filts)
             end
+            
+            % copy text file and rename it
+            textFile = sprintf('images/training/%s%s',outputPrefix,'.txt'); % get text file name
+            copyfile(textFile, 'images/output');
+            
+            % get old and new names and 'copy' file
+            textFileOld = sprintf('images/output/%s%s',outputPrefix,'.txt');
+            textFileNew = sprintf('images/output/%s%s',padded,'.txt');
+            movefile(textFileOld, textFileNew);
             
             % reset for next run
             rotated = 0;
