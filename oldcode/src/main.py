@@ -157,7 +157,7 @@ class Game:
         self.escape_nodes = set()
 
         # construct the camera system
-        self.camera = Camera(1)
+        self.camera = Camera(0)
 
         # construct the object detector
         self.detector = Detector(weight_path, network_config_path, object_config_path)

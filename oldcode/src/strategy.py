@@ -96,16 +96,17 @@ class Strategy:
         for current_robot in self.orders:
             if current_robot == target:
                 input('Press ENTER to recognize a gesture:')
-                # gesture=input('input a gesture:')
-                gesture = self.gesture_detector.get_gesture()
-                # gesture=input()
+                gesture=input('input a gesture:')
+                #gesture = self.gesture_detector.get_gesture()
+                gesture=input()
                 logger.info('current gesture is {}'.format(gesture))
                 is_valid, instruction = self.gesture_converter(graph, objects_on_graph, target, gesture)
                 counter = 3
                 while not is_valid or counter == 0:
                     input('Invalid movement. Press ENTER to recognize a gesture again:')
-                    # gesture = input('input a gesture:')
-                    gesture = self.gesture_detector.get_gesture()
+                    gesture = input('input a gesture:')
+                    #gesture = self.gesture_detector.get_gesture()
+                    gesture=input()
                     logger.info('current gesture is {}'.format(gesture))
                     is_valid, instruction = self.gesture_converter(graph, objects_on_graph, target, gesture)
                     counter -= 1
