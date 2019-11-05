@@ -15,15 +15,14 @@ clc; close all; clear all; rng('shuffle');
 
 % user settings -----------------------------------------------------------
 
-makeImages = 10; % (10) permutations of each image to make
-repeatProb = 0.3; % (0.3) probability an image goes back through filtering again
-maxAngle = 30; % (30) max angle rotations will make
-fuzz = 0.1; % (0.1) fuzz in noise
+makeImages = 10;    % (10) permutations of each image to make
+repeatProb = 0.3;	% (0.3) probability an image goes back through filtering again
+maxAngle = 30;      % (30) max angle rotations will make
+fuzz = 0.05;        % (0.05) fuzz in noise
 
-deleteExistingFiles = 1; % deletes previous output before saving new run
+deleteExistingFiles = 1;	% deletes previous output before saving new run
 
 % other vars (no touch) ---------------------------------------------------
-
 rotated = 0;
 flipped = 0;
 filts = 0;
@@ -40,7 +39,8 @@ if deleteExistingFiles % delete previous files
         fprintf(1, 'Deleting %s\n', fullFileName);
         delete(fullFileName);
     end
-    oldFiles = dir(fullfile('images/output/', '*.jpg'));
+    fprintf('Deleted %i files\n',length(oldFiles))
+    oldFiles = dir(fullfile('images/output/', '*.jpg')); 
 end
 
 % check if data exists and ask to overwrite
@@ -73,7 +73,7 @@ if length(getImages) ~= length(getTxts)
 end
 
 % actual loop start
-fprintf('Starting...\n');
+fprintf('Starting permutation generator...\n');
 for j = 1:length(getImages)
     
     % get image
@@ -84,34 +84,34 @@ for j = 1:length(getImages)
     
     while i < makeImages
         adjFactor = rand();
-        alg = randi(7); % keep between 1 and 5 to disallow black and white
+        alg = randi(2); % <= 5 for color only, <= 2 for no coordinate changes
         filts = filts + 1;
         
         switch alg
             
-            case 1 % flip
+            case 3 % flip
                 if flipped
                     continue
                 end
                 temp = flipdim(im, 2);           % horizontal flip
                 
-            case 2 % flip again for more probability
+            case 4 % flip again for more probability
                 if flipped
                     continue
                 end
                 temp = flipdim(im, 2);           % horizontal flip
                 
-            case 3 % rotate
+            case 5 % rotate
                 if rotated
                     continue
                 end
                 temp = imrotate(im,randi([1 maxAngle]),'crop');
                 rotated = 1;
                 
-            case 4 % make fuzzy
+            case 1 % make fuzzy
                 temp = imnoise(im,'gaussian',0.0,adjFactor*fuzz);
                 
-            case 5 % change contrast
+            case 2 % change contrast
                 temp = imadjust(im,[.1 .2 0; .8 .9 1],[]);
                 
             case 6 % make b&w and increase contrast
@@ -142,7 +142,11 @@ for j = 1:length(getImages)
             filename = sprintf('images/output/%s.jpg', padded);
             imwrite(f.cdata, filename);
             
-            fprintf("Image %s created with %i filters\n",padded, filts)
+            if filts > 1
+                fprintf("Image %s created with %i filters\n",padded, filts)
+            else
+                fprintf("Image %s created with %i filter\n",padded, filts)
+            end
             
             % reset for next run
             rotated = 0;
@@ -155,7 +159,7 @@ for j = 1:length(getImages)
         end % if termChance
         
     end % 1:makeImages
-    fprintf('Image %s finished\n',outputPrefix)
+    fprintf('Image %s.jpg finished with %i permutations\n',outputPrefix, makeImages)
     i = 0;
 end % 1:length(getImages)
 
