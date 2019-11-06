@@ -9,9 +9,9 @@ import time
 import json
 import random
 
-WEIGHT_PATH = '../model/custom_tiny_yolov3.weights'
-NETWORK_CONFIG_PATH = '../cfg/custom-tiny.cfg'
-OBJECT_CONFIG_PATH = '../cfg/custom.data'
+WEIGHT_PATH = '../model/bots-yolov3-tiny_500.weights'
+NETWORK_CONFIG_PATH = '../cfg/bots-yolov3-tiny.cfg'
+OBJECT_CONFIG_PATH = '../cfg/bots-obj.data'
 ROBOTS_CONFIG_PATH = '../cfg/robots.json'
 
 logger = logging.getLogger(__name__)
@@ -28,27 +28,27 @@ class FakeGame:
                 centers.append(center)
         self.centers = centers
         self.graph_builder = GraphBuilder(self.centers)
-        self.orders = ['thief', 'policeman1', 'policeman2']
+        self.orders = ['Thief', 'Policeman 1', 'Policeman 2']
         self.strategy = Strategy(self.orders)
         self.object_list = {
-            "thief": {
+            "Thief": {
                 "confidence": 0.99,
                 "center": self.centers[6],  # (width,height)
                 "size": (0.15, 0.10),  # (width,height)
             },
-            "policeman1": {
+            "Policeman 1": {
                 "confidence": 0.99,
                 "center": self.centers[1],  # (width,height)
                 "size": (0.15, 0.05),  # (width,height)
             },
-            "policeman2": {
+            "Policeman 2": {
                 "confidence": 0.99,
                 "center": self.centers[3],  # (width,height)
                 "size": (0.15, 0.05),  # (width,height)
             }
         }
         self.counter = 0
-        self.thief_movements = [13, 14, 15, 16]
+        self.Thief_movements = [13, 14, 15, 16]
         self.escape_nodes = {10}
         self.graph = None
         self.objects_on_graph = None
@@ -70,7 +70,7 @@ class FakeGame:
         instructions = self.strategy.get_next_steps_shortest_path(graph, objects_on_graph)
         logger.info('instructions:{}'.format(instructions))
 
-        # instructions['thief'] = [objects_on_graph['thief'], self.thief_movements[self.counter]]
+        # instructions['Thief'] = [objects_on_graph['Thief'], self.Thief_movements[self.counter]]
         self.instructions = instructions
 
         self.counter += 1
@@ -89,19 +89,19 @@ class FakeGame:
         Returns
         -------
         game_over: bool
-            True if the thief is at the escape point or the policemen have caught the thief, otherwise False.
+            True if the Thief is at the escape point or the policemen have caught the Thief, otherwise False.
         """
         game_over = False
         if self.instructions is None or self.objects_on_graph is None or self.graph is None:
             return game_over
-        if 'thief' in self.objects_on_graph:
-            if self.objects_on_graph['thief'] in self.escape_nodes:
+        if 'Thief' in self.objects_on_graph:
+            if self.objects_on_graph['Thief'] in self.escape_nodes:
                 game_over = True
-                logger.info('The thief wins!')
+                logger.info('The Thief wins!')
             else:
                 for name, instruction in self.instructions.items():
-                    if name != 'thief':
-                        if self.instructions['thief'][1] == instruction[1]:
+                    if name != 'Thief':
+                        if self.instructions['Thief'][1] == instruction[1]:
                             game_over = True
                             logger.info('The policemen win!')
         return game_over
@@ -144,9 +144,9 @@ class Game:
         """
 
         # fix robot movement order
-        self.orders = ['thief', 'policeman1']
-        # self.orders = ['policeman1', 'policeman2']
-        # self.orders = ['thief', 'policeman1', 'policeman2']
+        self.orders = ['Thief', 'Policeman 1']
+        # self.orders = ['Policeman 1', 'Policeman 2']
+        # self.orders = ['Thief', 'Policeman 1', 'Policeman 2']
 
         # initialize internal states
         self.graph = None
@@ -157,7 +157,7 @@ class Game:
         self.escape_nodes = set()
 
         # construct the camera system
-        self.camera = Camera(0)
+        self.camera = Camera(2)
 
         # construct the object detector
         self.detector = Detector(weight_path, network_config_path, object_config_path)
@@ -185,19 +185,19 @@ class Game:
         Returns
         -------
         game_over: bool
-            True if the thief is at the escape point or the policemen have caught the thief, otherwise False.
+            True if the Thief is at the escape point or the policemen have caught the Thief, otherwise False.
         """
         game_over = False
         if self.instructions is None or self.objects_on_graph is None or self.graph is None:
             return game_over
-        if 'thief' in self.objects_on_graph:
-            if self.objects_on_graph['thief'] in self.escape_nodes:
+        if 'Thief' in self.objects_on_graph:
+            if self.objects_on_graph['Thief'] in self.escape_nodes:
                 game_over = True
-                logger.info('The thief wins!')
+                logger.info('The Thief wins!')
             else:
                 for name, instruction in self.instructions.items():
-                    if name != 'thief':
-                        if self.instructions['thief'][1] == instruction[1]:
+                    if name != 'Thief':
+                        if self.instructions['Thief'][1] == instruction[1]:
                             game_over = True
                             logger.info('The policemen win!')
         return game_over

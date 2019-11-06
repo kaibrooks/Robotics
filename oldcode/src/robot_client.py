@@ -20,7 +20,7 @@ class Robot:
         Parameters
         ----------
         name: str
-            one of the names of our objects(thief, policeman1 and policeman2)
+            one of the names of our objects(Thief, Policeman 1 and Policeman 2)
         ip: str
             a string which indicates the ip address of our remote server, for example, "192.168.1.1"
         port: int
@@ -106,8 +106,8 @@ class Robot:
 
 
 if __name__ == '__main__':
-    #robot_client = Robot('thief', '192.168.31.254', 4242)
-    robot_client = Robot('Policeman1', '192.168.1.102', 4242)
+    #robot_client = Robot('Thief', '192.168.31.254', 4242)
+    robot_client = Robot('Policeman 1', '192.168.1.102', 4242)
     robot_client.connect()
     # robot_client.move_forward(1)
     robot_client.rotate(60)

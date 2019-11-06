@@ -10,7 +10,7 @@ OBJECT_CONFIG_PATH = '../cfg/custom.data'
 detector = Detector(WEIGHT_PATH, NETWORK_CONFIG_PATH, OBJECT_CONFIG_PATH)
 
 colors = {
-    'thief': (255, 0, 0),
+    'Thief': (255, 0, 0),
     'policeman1': (0, 255, 0),
     'policeman2': (0, 0, 255)
 }

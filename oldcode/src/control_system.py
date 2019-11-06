@@ -61,7 +61,7 @@ class Controller:
                     self.robots[key] = robot
         else:
             # testing code
-            self.robot_client = Robot('thief', '192.168.1.106', 4242)
+            self.robot_client = Robot('Thief', '192.168.1.2', 4242)
             self.last_vector = None
 
     def connect(self):
@@ -296,9 +296,9 @@ if __name__ == '__main__':
     from camera_system import get_image
     from object_detector import Detector
 
-    WEIGHT_PATH = '../model/custom_tiny_yolov3.weights'
-    NETWORK_CONFIG_PATH = '../cfg/custom-tiny.cfg'
-    OBJECT_CONFIG_PATH = '../cfg/custom.data'
+    WEIGHT_PATH = '../model/bots-yolov3-tiny_500.weights'
+    NETWORK_CONFIG_PATH = '../cfg/bots-yolov3-tiny.cfg'
+    OBJECT_CONFIG_PATH = '../cfg/bots-obj.data'
     ROBOTS_CONFIG_PATH = '../cfg/robots.json'
     detector = Detector(WEIGHT_PATH, NETWORK_CONFIG_PATH, OBJECT_CONFIG_PATH)
     centers = [
@@ -325,7 +325,7 @@ if __name__ == '__main__':
     object_list, image = get_object_list()
     print(object_list)
 
-    p1 = np.array(object_list['thief']['center']).reshape((-1, 1))
+    p1 = np.array(object_list['Thief']['center']).reshape((-1, 1))
 
     height, width = image.shape[0], image.shape[1]
     x = int(centers[1][0] * width)
@@ -340,12 +340,12 @@ if __name__ == '__main__':
 
     object_list, image = get_object_list()
 
-    p2 = np.array(object_list['thief']['center']).reshape((-1, 1))
+    p2 = np.array(object_list['Thief']['center']).reshape((-1, 1))
 
     current_direction = p2 - p1
 
     sensors = {
-        'thief': {
+        'Thief': {
             'orientation': {
                 'base': (0, -1),
                 'current': (current_direction[0], current_direction[1])
@@ -357,14 +357,14 @@ if __name__ == '__main__':
     controller.last_vector = target_vector - p2
 
     signals = controller.calculate_control_signals(
-        centers, object_list, {'thief': (1, 2)}, sensors)
+        centers, object_list, {'Thief': (1, 2)}, sensors)
     alpha = int(signals[0]['param'])
     print('alpha is {}'.format(alpha))
     controller.robot_client.rotate(alpha)
 
-    vector_previous = np.array(object_list['thief']['center']).reshape((-1, 1))
+    vector_previous = np.array(object_list['Thief']['center']).reshape((-1, 1))
 
-    while not controller.is_finished(centers, object_list, {'thief': (1, 2)}):
+    while not controller.is_finished(centers, object_list, {'Thief': (1, 2)}):
         target_vector = np.array(centers[1]).reshape((-1, 1))
 
         controller.robot_client.move_forward(2)
@@ -375,9 +375,9 @@ if __name__ == '__main__':
             object_list = detector.detect_objects(image)
         print(object_list)
         vector_current = np.array(
-            object_list['thief']['center']).reshape((-1, 1))
+            object_list['Thief']['center']).reshape((-1, 1))
         sensors = {
-            'thief': {
+            'Thief': {
                 'orientation': {
                     'base': (0, 1),
                     'current': ((vector_current - vector_previous)[0], (vector_current - vector_previous)[1])
@@ -385,7 +385,7 @@ if __name__ == '__main__':
             }
         }
         signals = controller.calculate_control_signals(
-            centers, object_list, {'thief': (1, 2)}, sensors)
+            centers, object_list, {'Thief': (1, 2)}, sensors)
         alpha = int(signals[0]['param'])
         print('alpha is {}'.format(alpha))
         if alpha > 50:

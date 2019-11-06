@@ -89,7 +89,7 @@ class Strategy:
         instructions = {}
         object_locations = objects_on_graph.copy()
 
-        target = 'thief'
+        target = 'Thief'
         chasing_group = set(self.orders)
         if target in chasing_group:
             chasing_group.remove(target)
@@ -227,19 +227,19 @@ if __name__ == '__main__':
 
     graph = np.array(example, dtype=np.int64)
 
-    thief_path = [13, 14, 15, 16]
-    S1 = Strategy(['thief', 'policeman1', 'policeman2'])
+    Thief_path = [13, 14, 15, 16]
+    S1 = Strategy(['Thief', 'Policeman 1', 'Policeman 2'])
     objects_on_graph = {
-        'thief': 7,
-        'policeman1': 2,
-        'policeman2': 4
+        'Thief': 7,
+        'Policeman 1': 2,
+        'Policeman 2': 4
     }
     while True:
-        thief_step = input('Input a gesture: ')
-        valid, thief_next = Strategy.gesture_converter(graph, objects_on_graph, 'thief', thief_step)
+        Thief_step = input('Input a gesture: ')
+        valid, Thief_next = Strategy.gesture_converter(graph, objects_on_graph, 'Thief', Thief_step)
         instructions = S1.get_next_steps_shortest_path(graph, objects_on_graph)
-        instructions['thief'] = [objects_on_graph['thief'], thief_next]
+        instructions['Thief'] = [objects_on_graph['Thief'], Thief_next]
         print(instructions)
-        for p in ['policeman1', 'policeman2']:
+        for p in ['Policeman 1', 'Policeman 2']:
             objects_on_graph[p] = instructions[p][1]
-        objects_on_graph['thief'] = thief_next
+        objects_on_graph['Thief'] = Thief_next

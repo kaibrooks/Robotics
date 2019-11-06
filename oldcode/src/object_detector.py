@@ -266,11 +266,11 @@ if __name__ == '__main__':
     logger.addHandler(handler)
     from camera_system import Camera
 
-    weight_path = '../model/custom_tiny_yolov3.weights'
-    network_config_path = '../cfg/custom-tiny.cfg'
-    object_config_path = '../cfg/custom.data'
+    weight_path = '../model/bots-yolov3-tiny_500.weights'
+    network_config_path = '../cfg/bots-yolov3-tiny.cfg'
+    object_config_path = '../cfg/bots-obj.data'
     detector = Detector(weight_path, network_config_path, object_config_path, auto_id=True)
-    camera = Camera(1, save=False, draw=False, num_skip=0)
+    camera = Camera(2, save=False, draw=False, num_skip=0)
 
     window_name = 'test'
     cv2.namedWindow(window_name)

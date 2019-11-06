@@ -50,12 +50,12 @@ class GraphBuilder:
         objects_on_graph: dict
             a dict which indicates robots' locations on the graph
             example:
-                Assume thief is at node #3, policeman1 is at node #7 and policeman2 is at node #9, then this dict may like
+                Assume Thief is at node #3, Policeman 1 is at node #7 and Policeman 2 is at node #9, then this dict may like
                 the dict below.
                 {
-                    "thief": 3,
-                    "policeman1": 7,
-                    "policeman2": 9
+                    "Thief": 3,
+                    "Policeman 1": 7,
+                    "Policeman 2": 9
                 }
         """
         graph_4 = [
@@ -127,7 +127,7 @@ class GraphBuilder:
         # objects_on_graph = {}
         ''' Example
         object_list{
-                    "thief":{
+                    "Thief":{
                               "center":(0.16.0.37)
                             },
                     "police1":{
