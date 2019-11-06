@@ -18,7 +18,7 @@ clc; close all; clear all; rng('shuffle');
 makeImages = 10;    % (10) permutations of each image to make
 repeatProb = 0.3;	% (0.3) probability an image goes back through filtering again
 maxAngle = 30;      % (30) max angle rotations will make
-fuzz = 0.05;        % (0.05) fuzz in noise
+fuzz = 0.01;        % (0.01) fuzz in noise
 
 deleteExistingFiles = 1;	% deletes previous output before saving new run
 
@@ -31,7 +31,7 @@ cont = '';
 % go ----------------------------------------------------------------------
 
 % check for older data
-oldFiles = dir(fullfile('images/output/', '*')); % existing output from previous runs
+oldFiles = dir(fullfile('images/output/', '*.*')); % existing output from previous runs
 if deleteExistingFiles % delete previous files
     for k = 1 : length(oldFiles)
         baseFileName = oldFiles(k).name;
