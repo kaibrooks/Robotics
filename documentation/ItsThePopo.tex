@@ -9,9 +9,9 @@
 \newcommand{\figWatermark}{}%\small Brooks \today} 		% Figure overlay text
 \newcommand{\figHere}{\begin{overpic}[percent,scale=0.34]}	% Settings for all figures
 
-\newcommand{\authorname}{Brass, Brooks, Hull, Mayers, Minko}
+\newcommand{\authorname}{\footnotesize{Brass}\normalsize{, Brooks, Hull, Mayers, Minko}}
 \newcommand{\classnumber}{ECE578}
-\newcommand{\projectname}{El Queso Est\'{a} Solo}
+\newcommand{\projectname}{Stack Cheese}
 
 % Packages ------------------------------------------------
 
@@ -142,9 +142,76 @@
 \pagenumbering{arabic}
 
 \section{Overview}
-The purpose of this lab is to do a thing.
+As a new design scheme, we changed the \textit{Policemen and Thief} to the less violent \textit{Mice and Cheese}.\\
 
+Design a game with 3 Viking Bots: two dressed as mice and the third as a wedge of cheese. The goal of the game is to keep the cheese away from the hungry maws of the two little mice. The game uses object recognition to find the location of each game piece on the board. The program builds a game board and determines the proper strategy so that the agents can move effectively in the right direction. The user goes first and can control the course of the cheese, and the mice will continuously move towards the cheese after each turn. Will the cheese escape the mice? Or will it get eaten? Tune in and find out next time on Perkowski’s comedy cartoon hour.
 
+\section{Hardware}
+The hardware for our project consists of 3 robots and all their associated parts. In the past, this project utilized 2 ``Viking Bots" and a more massive hexapod robot. Our requirements for the project were to replace the hexapod robot with another Viking Bot and to improve the robustness of the hardware. This would ensure that our hardware can run more consistently, at a faster pace, and in more diverse conditions than were possible in previous implementations of the project.
+
+\subsection{Goals}
+	\begin{enumerate}
+		\item Purchase and assemble a new Viking Bot
+		\item Assess what hardware was left over from previous implementations of project
+		\item Upgrade and standardize battery packs for all robots
+		\item Improve wiring reliability and cable management
+		\item Ensure that the robots can run consistently at top speed for fast gameplay	
+\	end{enumerate}
+
+\subsection{Design}
+We assembled our project’s robot cars from an inexpensive kit, which was quick to assemble.  The Viking Bot robot kit consists of the following parts: 
+	\begin{itemize}
+		\item An acrylic sheet with mounting holes and cutouts for wires
+		\item A set of 2 DC motors and wheels
+		\item A swivel caster for a back wheel
+		\item A battery pack (AA battery size)
+		\item An L298N H-Bridge Module
+		\item A Raspberry Pi microprocessor board
+	\end{itemize}
+
+Due to the nature of using a ``kit" robot, we didn’t have a lot of latitude to design the hardware we were using. However, we undertook the development of a better battery and power management system for the robots after discovering the following problems:
+
+	\begin{itemize}
+		\item Batteries we inherited had differing voltages, causing robots to function differently from one another
+		\item Some robots used multiple battery packs to achieve uniform voltages, adding extra weight to the robot
+		\item The VIN port powered the Raspberry Pi's, causing damage to the boards.
+		\item H-Bridge modules were providing inconsistent outputs and current limiting the Raspberry Pi's
+	\end{itemize}
+	
+\section{Movement}
+Each Viking Bot has a raspberry pi that sends signals to an L298N H-Bridge. We created the controls using simple python functions that send commands which control the direction, power, and speed of the motors. It is possible to sign into the board remotely and send instructions using the wifi capabilities of the Raspberry Pi.
+
+\subsection{Goals}
+Control each robot remotely
+Control speed, timing, and direction of robots
+Streamline all hardware to allow identical control schemes for each robot
+
+\subsection{Design}
+The Viking Bots are functionally Braitenberg vehicles. The control is simple and sent to the H-Bridge via the Raspberry Pi. We control the movement of the robots by the applied power and the direction of the motor’s rotation. The robots are fundamentally simple but need a mechanism to control them remotely.
+
+\subsection{Implementation}
+The Viking Bots are feedback-driven agents that we control through the overall game program. The user gives the program instructions in which way they want the bots to move. The program interprets this command and decides the turn direction and motor-driven distance.
+
+\subsection{Challenges}
+The lack of documentation regarding movement is a considerable challenge. The primary control program on each robot is simple and easy to follow; however, the mechanics of the game and functionality have been the biggest hurdle. 
+	\begin{itemize}
+		\item No documentation
+		\item No instructions for game use
+		\item No instructions on setup
+		\item No comments in code
+	\end{itemize}
+
+\subsection{Planned Improvements}
+	\begin{itemize}
+		\item Better documentation
+		\item Example or walkthrough of how to set up a game
+		\item Inline code comments explaining how each function operates
+	\end{itemize}
+	
+
+% l u l u l u l u l ----------
+\newpage
+\section{Some sample commands that shouldn't be in the final document}
 Math me
 \begin{align}
 \begin{split}\label{eq:1}
