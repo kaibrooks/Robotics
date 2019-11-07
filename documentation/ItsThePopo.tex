@@ -7,11 +7,13 @@
 
 \newcommand{\figOverlay}{\put(34,10){\color{black!50} \figWatermark}} % Figure overlay settings
 \newcommand{\figWatermark}{}%\small Brooks \today} 		% Figure overlay text
-\newcommand{\figHere}{\begin{overpic}[percent,scale=0.34]}	% Settings for all figures
+\newcommand{\figHere}{\begin{overpic}[percent,scale=0.32]}	% Settings for all figures
+\newcommand{\figHereB}{\begin{overpic}[percent,scale=2]}	% Settings for all figures
+\newcommand{\figHereC}{\begin{overpic}[percent,scale=0.5]}	% Settings for all figures
 
-\newcommand{\authorname}{\footnotesize{Brass}\normalsize{, Brooks, Hull, Mayers, Minko}}
+\newcommand{\authorname}{Brass, Brooks, Hull, Mayers, Minko}
 \newcommand{\classnumber}{ECE578}
-\newcommand{\projectname}{Stack Cheese}
+\newcommand{\projectname}{Mice and Cheese}
 
 % Packages ------------------------------------------------
 
@@ -30,7 +32,7 @@
 \usepackage{enumitem}			% Use for QandA environment
 \usepackage{booktabs}			% Merging columns in tables
 
-\usepackage[firstpage]{draftwatermark}	% use [nostamp] when finished, [firstpage] otherwise
+\usepackage[nostamp]{draftwatermark}	% use [nostamp] when finished, [firstpage] otherwise
 \SetWatermarkText{DRAFT}
 \SetWatermarkColor{red!50}
 \SetWatermarkScale{3}
@@ -46,11 +48,23 @@
 \usepackage{siunitx}				% SI units
 
 \usepackage{hyperref}				% makes links
+\usepackage[normalem]{ulem}			% adds strikethrough
 
 \usepackage{array}					% Used for centering tabular data
 \newcolumntype{M}[1]{>{\centering\arraybackslash}p{#1}} % The actual centered column format
 
 \usepackage{listings} %For code in appendix
+
+% background image for the first page
+\usepackage{eso-pic}
+\newcommand\BackgroundPic{%
+\put(0,0){%
+\parbox[b][\paperheight]{\paperwidth}{%
+\vfill
+\centering
+\includegraphics[width=\paperwidth,height=\paperheight]{images/bg.png}%
+\vfill
+}}}
 
 \definecolor{mymauve}{rgb}{0.58,0,0.82}
 \definecolor{mygreen}{rgb}{0,0.6,0}
@@ -91,6 +105,7 @@
 
 % Title Page ------------------------------------------------
 \begin{document}
+\AddToShipoutPicture*{\BackgroundPic} % add background image to title page
 
 % Formatting for code in appendix; why it's right here, nobody knows
 \lstset { 
@@ -111,6 +126,7 @@
 	\begin{center}
 		\vspace*{1cm}
 
+		\huge\textsc{\textcolor{mygray}{\sout{Police and Thief}}}\\
 		\huge\textsc{\projectname}
 
 		\vspace{0.5cm}
@@ -125,7 +141,7 @@
 		\vfill
 		\vspace{0.8cm}
 		
-		\includegraphics[width=0.5\textwidth]{images/psulogo_horiz_msword.tif}
+		\includegraphics[width=0.5\textwidth]{images/psulogo_horiz_msword_cd.png}
 		
 		\vspace{0.5cm}
 		Electrical and Computer Engineering\\
@@ -192,14 +208,21 @@
 	\begin{figure}[H]	 		
 		\centering
 	  	\label{fig:}
-	  	\figHere{images/kitty.jpg} \figOverlay
+	  	\figHere{images/organized_locker.jpg} \figOverlay
 	  	\end{overpic}
-	  	\figHere{images/kitty.jpg} \figOverlay
-	  	\end{overpic}
-	  	\figHere{images/kitty.jpg} \figOverlay
-	  	\end{overpic}
-	  	\caption{bat and servo parts}
+	  	\caption{Organized locker}
 	\end{figure}
+	
+	\begin{figure}[H]	 		
+		\centering
+	  	\label{fig:}
+	  	\figHere{images/battery_box.jpg} \figOverlay
+	  	\end{overpic}
+	  	\figHere{images/box_of_servoParts.jpg} \figOverlay
+	  	\end{overpic}
+	  	\caption{Battery and servo parts}
+	\end{figure}
+	
 	
 \subsection{Battery and Power System}
 
@@ -217,7 +240,7 @@
 	\begin{figure}[H]	 		
 		\centering
 	  	\label{fig:}
-	  	\figHere{images/kitty.jpg} \figOverlay
+	  	\figHereB{images/L298N_schematic.jpg} \figOverlay
 	  	\end{overpic}
 	  	\caption{Schematic}
 	\end{figure}
@@ -227,17 +250,17 @@
 	\begin{figure}[H]	 		
 		\centering
 	  	\label{fig:}
-	  	\figHere{images/kitty.jpg} \figOverlay
+	  	\figHere{images/voltage_regulator_closeup.jpg} \figOverlay
 	  	\end{overpic}
-	  	\caption{Voltage Regulator}
+	  	\caption{Voltage regulator}
 	\end{figure}
 	
 	\begin{figure}[H]	 		
 		\centering
 	  	\label{fig:}
-	  	\figHere{images/kitty.jpg} \figOverlay
+	  	\figHere{images/hBridge_closeup.jpg} \figOverlay
 	  	\end{overpic}
-	  	\caption{H-Bridge Module}
+	  	\caption{H-Bridge module}
 	\end{figure}
 		
 \subsection{Building the Third Viking Bot}
@@ -246,7 +269,9 @@
 	\begin{figure}[H]	 		
 		\centering
 	  	\label{fig:}
-	  	\figHere{images/kitty.jpg} \figOverlay
+	  	\figHere{images/New_vikingBot.jpg} \figOverlay
+	  	\end{overpic}
+	  	\figHere{images/car_assembly.jpg} \figOverlay
 	  	\end{overpic}
 	  	\caption{Robot kit fully assembled with H-Bridge module}
 	\end{figure}
@@ -256,9 +281,9 @@
 		\begin{figure}[H]	 		
 		\centering
 	  	\label{fig:}
-	  	\figHere{images/kitty.jpg} \figOverlay
+	  	\figHere{images/car_top_view2.jpg} \figOverlay
 	  	\end{overpic}
-	  	\figHere{images/kitty.jpg} \figOverlay
+	  	\figHere{images/car_underside.jpg} \figOverlay
 	  	\end{overpic}
 	  	\caption{Finished robot with robust wiring and updated power system}
 	\end{figure}
@@ -266,7 +291,7 @@
 	\begin{figure}[H]	 		
 		\centering
 	  	\label{fig:}
-	  	\figHere{images/kitty.jpg} \figOverlay
+	  	\figHereC{images/Updated_rasp-l298n_bb.jpg} \figOverlay
 	  	\end{overpic}
 	  	\caption{Final wiring diagram for Viking Bots}
 	\end{figure}
@@ -282,7 +307,7 @@
 	\begin{figure}[H]	 		
 		\centering
 	  	\label{fig:}
-	  	\figHere{images/kitty.jpg} \figOverlay
+	  	\figHere{images/Diode_replacement.jpg} \figOverlay
 	  	\end{overpic}
 	  	\caption{Diode replaced just above the Micro USB port}
 	\end{figure}
@@ -299,9 +324,9 @@
 	\begin{figure}[H]	 		
 		\centering
 	  	\label{fig:}
-	  	\figHere{images/kitty.jpg} \figOverlay
+	  	\figHere{images/foam_sheets.jpg} \figOverlay
 	  	\end{overpic}
-	  	\figHere{images/kitty.jpg} \figOverlay
+	  	\figHere{images/cheese_template_guide.jpg} \figOverlay
 	  	\end{overpic}
 	  	\caption{Foam sheets and bamboo template}
 	\end{figure}
@@ -311,9 +336,9 @@
 	\begin{figure}[H]	 		
 		\centering
 	  	\label{fig:}
-	  	\figHere{images/kitty.jpg} \figOverlay
+	  	\figHere{images/cheese_holes.jpg} \figOverlay
 	  	\end{overpic}
-	  	\figHere{images/kitty.jpg} \figOverlay
+	  	\figHere{images/cheese_spread.jpg} \figOverlay
 	  	\end{overpic}
 	  	\caption{Foam wedge with melt spots and wood putty}
 	\end{figure}
@@ -321,11 +346,11 @@
 	\begin{figure}[H]	 		
 		\centering
 	  	\label{fig:}
-	  	\figHere{images/kitty.jpg} \figOverlay
+	  	\figHere{images/cheese.jpg} \figOverlay
 	  	\end{overpic}
-	  	\figHere{images/kitty.jpg} \figOverlay
+	  	\figHere{images/cheese_w_wheels.jpg} \figOverlay
 	  	\end{overpic}
-	  	\caption{Finished cheese wedge from side and top view}
+	  	\caption{Finished cheese wedge from top and side view}
 	\end{figure}
 	
 	We ordered rat stuffed animals for the enclosures of our other Viking Bots. The original plan was to order rats that were large enough to un-sew and wrap around our robots. With this in mind, we ordered the most enormous stuffed rats we could find within our price range, which ended up being a length of 19 inches. However, upon their arrival, we learned that they included the tail in the length measurement, and the tails were quite long. That meant that we did not quite have enough space to wrap them around the robots, so we decided to mount them to the top of the robots instead, like rats piloting the Viking Bots.\\
@@ -335,9 +360,7 @@
 	\begin{figure}[H]	 		
 		\centering
 	  	\label{fig:}
-	  	\figHere{images/kitty.jpg} \figOverlay
-	  	\end{overpic}
-	  	\figHere{images/kitty.jpg} \figOverlay
+	  	\figHere{images/dyeing_rat2.jpg} \figOverlay
 	  	\end{overpic}
 	  	\caption{White rat getting ready for dyeing}
 	\end{figure}
@@ -345,9 +368,9 @@
 	\begin{figure}[H]	 		
 		\centering
 	  	\label{fig:}
-	  	\figHere{images/kitty.jpg} \figOverlay
+	  	\figHere{images/dyeing_rat.jpg} \figOverlay
 	  	\end{overpic}
-	  	\figHere{images/kitty.jpg} \figOverlay
+	  	\figHere{images/dyeing_rat4.jpg} \figOverlay
 	  	\end{overpic}
 	  	\caption{Hand-dying to avoid dunking}
 	\end{figure}
@@ -355,9 +378,9 @@
 	\begin{figure}[H]	 		
 		\centering
 	  	\label{fig:}
-	  	\figHere{images/kitty.jpg} \figOverlay
+	  	\figHere{images/rat_roman2.jpg} \figOverlay
 	  	\end{overpic}
-	  	\figHere{images/kitty.jpg} \figOverlay
+	  	\figHere{images/rats_on_cheese2.jpg} \figOverlay
 	  	\end{overpic}
 	  	\caption{Rats on Roman and rats on cheese}
 	\end{figure}
@@ -365,11 +388,11 @@
 		\begin{figure}[H]	 		
 		\centering
 	  	\label{fig:}
-	  	\figHere{images/kitty.jpg} \figOverlay
+	  	\figHere{images/car_w_bluRat.jpg} \figOverlay
 	  	\end{overpic}
-	  	\figHere{images/kitty.jpg} \figOverlay
+	  	\figHere{images/car_w_pinkRat.jpg} \figOverlay
 	  	\end{overpic}
-	  	\caption{Blue and pink rats on cheese}
+	  	\caption{Blue and pink rats mounted on robots}
 	\end{figure}
 
 \subsection{Challenges}
@@ -471,11 +494,38 @@ YOLO training - \href{https://medium.com/@manivannan_data/how-to-train-yolov3-to
 
 Yolo\_Mark: \href{https://github.com/AlexeyAB/Yolo_mark}{https://github.com/AlexeyAB/Yolo\_mark}\\
 
+\section{Major Purchases}
+	\begin{table}[H]
+	\centering
+		\begin{tabular}{|M{.3\textwidth}|M{.3\textwidth}|M{.3\textwidth}|} % Col width
+		\hline
+		\textbf{Item} & \textbf{Cost} & \textbf{Date Received} \\ \hline
+		Battery Charger (Universal Smart Battery Charger 4 Bay by Eastshine) & \$27.95 & 2019-10-10  \\ \hline		
+		Battery Holders (6 pcs 3 x 3.7V 18650 by Sackorange) & \$6.99 & 2019-10-10  \\ \hline	
+		Spare Robot Car (Perseids DIY Robot Smart Car) &  \$13.99 & 2019-10-16  \\ \hline			
+		Motor Driver (L298N) & \$6.89 & 2019-10-16  \\ \hline			
+		18650 Batteries (Samsung 25R 18650 2500mAh 20A) & \$28.05 & 2019-10-15  \\ \hline	
+		4x Voltage Dividers (12V to 6V Converter and Regulator by DROK) & \$39.96 &  \\ \hline			
+		NETGEAR AC750 Dual Band WiFi Router & \$39.88 &  \\ \hline			
+				
+		\end{tabular}						
+		\caption{Itemized purchases}	
+	\end{table}
+	
+	\section{Darknet training flowchart}
+		\begin{figure}[H]	 		
+		\centering
+	  	\label{fig:}
+	  	\figHereC{images/training_flowchart.png} \figOverlay
+	  	\end{overpic}
+	  	\caption{Flow chart for training machine vision}
+	\end{figure}
 
-	\section{MATLAB Code of Mathematical Analysis}
-	\lstinputlisting[language=Matlab]{code/simGame.m}
 
-	\section{Python Code for A Thing}
+	\section{MATLAB code of image permutator}
+	\lstinputlisting[language=Matlab]{code/imagePerm_68406b5911fa9689330d8ce4011daac789b97487.m}
+
+	\section{Python code for main function}
 	\lstinputlisting[language=Python]{code/main.py}
 
 	
