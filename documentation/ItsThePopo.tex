@@ -17,6 +17,9 @@
 \newcommand{\classnumber}{ECE578}
 \newcommand{\projectname}{Mice and Cheese}
 
+
+\newcommand{\robotServerName}{Python code for robot server}
+
 % Packages ------------------------------------------------
 
 \usepackage[USenglish]{babel} 	% American English
@@ -520,141 +523,21 @@ We solved these problems by setting up the robots on a different wifi network, a
 	  	\caption{NETGEAR AC750 wireless router}
 	\end{figure}
 
-	Below is a block diagram of the entire system. This shows the connection of the robots and the central computer to the wifi network as well as the connections of the USB camera, H-Bridge, and motors. This diagram was created in order to give a better representation of the system and how it relates to the motors eventually turning to move the robot to the next game space.
+	\subsubsection{Complete robot server system}
+	Below is a block diagram of the entire system. This diagram shows the connections between computers, robot hardware, and wireless network. It gives a visual representation of the robot system and how it relates to the motors turning to move the robot to the next game space.
 	
+	The code for running this server is listed in the appendix under \textit{\robotServerName}. % this is weird because I can't figure out how to reference a \subsection in the appendix, and making it a figure doesn't work
+
 	\begin{figure}[H]	 		
 		\centering
 	  	\label{fig:}
 	  	\figHereD{images/system_block_diagram.png} \figOverlay
 	  	\end{overpic}
-	  	\caption{Movement block diagram}
+	  	\caption{System block diagram}
 	\end{figure}
 	
-	\begin{figure}
-	\begin{lstlisting}[language=Python]
-	import zerorpc
-
-	class Robot:
-	    """
-	    Robot class is a high-level abstraction of our real objects, and it has simple 
-	    interfaces which are easy to manipulate.
-	    Examples:
-	        robot = Robot(name, ip, port)
-	        robot.connect()
-	        robot.rotate(85)
-	        robot.move_forward(2)
-	        data = robot.get_sensor_data()
-	        robot.disconnect()
-	    """
 	
-    def __init__(self, name, ip, port):
-        """
-        Construct a robot with corresponding name, ip and port.
-
-        Parameters
-        ----------
-        name: str
-            one of the names of our objects(thief, policeman1 and policeman2)
-        ip: str
-            a string which indicates the ip address of our remote server, 
-            for example, "192.168.1.1"
-        port: int
-            an integer which indicates the port number of our remote server
-        """
-        self.name = name
-        self.ip = ip
-        self.port = port
-        self.client = zerorpc.Client(heartbeat=None)
-
-    def connect(self):
-        address = 'tcp://{ip}:{port}'.format(ip=self.ip, port=self.port)
-        self.client.connect(address)
-
-    def disconnect(self):
-        self.client.close()
-
-    def get_sensor_data(self):
-        try:
-            data = self.client.get_sensor_data()
-            result = {
-                'flag': True,
-                'data': data
-            }
-        except Exception as e:
-            result = {
-                'flag': False,
-                'message': repr(e)
-            }
-        return result
-
-    def rotate(self, alpha):
-        """
-        Rotate the robot with alpha degree clockwisely.
-
-        Parameters
-        ----------
-        alpha: int
-            the degree that the robot rotates(can be negative for 
-            counterclockwise rotation)
-
-        Returns
-        -------
-        result: dict
-            a dict consists of some feedback information
-        """
-        try:
-            result = {
-                'flag': True
-            }
-            self.client.rotate(int(alpha))
-        except Exception as e:
-            result = {
-                'flag': False,
-                'message': repr(e)
-            }
-        return result
-
-    def move_forward(self, n):
-        """
-        Move forward n units.
-
-        Parameters
-        ----------
-        n: int
-            steps that a robot moves(can be negative for backward)
-
-        Returns
-        -------
-        result: dict
-            a dict consists of some feedback information
-        """
-        try:
-            result = {
-                'flag': True
-            }
-            self.client.move_forward(int(n))
-        except Exception as e:
-            result = {
-                'flag': False,
-                'message': repr(e)
-            }
-        return result
-
-
-	if __name__ == '__main__':
-	    #robot_client = Robot('thief', '192.168.31.254', 4242)
-	    robot_client = Robot('Policeman1', '192.168.1.102', 4242)
-	    robot_client.connect()
-	    # robot_client.move_forward(1)
-	    robot_client.rotate(60)	
-	\end{lstlisting}
-	\label{Python Code for Robot Server connection using zerorpc}
-	\end{figure}
-
-
-	\subsubsection{Complete robot server system}
-	Below is a block diagram of the entire system. This diagram shows the connections between computers, robot hardware, and wireless network. It gives a visual representation of the robot system and how it relates to the motors turning to move the robot to the next game space.
-
+	
 
 \subsection{Challenges}
 	Like most of the challenges in this project, the movement has been a problem with documentation. The main control program on each robot is simple and easy to follow; however, the mechanics of the game and functionality was the most significant challenge. 
@@ -869,6 +752,8 @@ Yolo\_Mark: \href{https://github.com/AlexeyAB/Yolo_mark}{https://github.com/Alex
 \subsection{Python code for main function}
 	\lstinputlisting[language=Python]{code/main.py}
 
+\subsection{\robotServerName}
+	\lstinputlisting[language=Python]{code/robotServer.py}
 	
 
 \end{document}
