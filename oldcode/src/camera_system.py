@@ -1,14 +1,30 @@
+'''
+    Import OpenCV package
+    Import universally unique identifier package
+    Import standard library within Python
+'''
+
 import cv2
 import uuid
 import os
 
+'''
+    Assigns colors
+    thief - Red
+    policeman1 - Green
+    policeman2 - Blue
+    not sure why yet
+'''
 COLORS = {
     'thief': (255, 0, 0),
     'policeman1': (0, 255, 0),
     'policeman2': (0, 0, 255)
 }
+# Sets normal size sans-serif font
 FONT = cv2.FONT_HERSHEY_SIMPLEX
+# Separate scaling factor to independently scale the size of the font elements
 FONT_SCALE = 1
+# 
 LINE_TYPE = 2
 
 
