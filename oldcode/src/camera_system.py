@@ -8,6 +8,7 @@ import cv2
 import uuid
 import os
 
+# These are all just drawing functions for OpenCV
 '''
     Assigns colors
     thief - Red
@@ -24,7 +25,7 @@ COLORS = {
 FONT = cv2.FONT_HERSHEY_SIMPLEX
 # Separate scaling factor to independently scale the size of the font elements
 FONT_SCALE = 1
-# 
+# Line type. Don't know what "2" line type means, but guessing it could be a filled line.
 LINE_TYPE = 2
 
 
