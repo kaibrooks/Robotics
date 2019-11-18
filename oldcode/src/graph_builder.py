@@ -159,3 +159,4 @@ class GraphBuilder:
             current_center = self.return_current_center(current_val[0], current_val[1])
             objects_on_graph[key] = self.center_dict[current_center]
         return objects_on_graph
+    

@@ -1,3 +1,4 @@
+# Import zerorpc library
 import zerorpc
 
 
@@ -20,5 +21,7 @@ class FakeRobot(object):
 
 
 s = zerorpc.Server(FakeRobot())
+# IP address where the server is being binded to
+# This IP address allows you to listen on all interfaces and all addresses
 s.bind("tcp://0.0.0.0:4242")
 s.run()
