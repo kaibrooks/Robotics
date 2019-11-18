@@ -217,3 +217,4 @@ if __name__ == '__main__':
         gesture = gesture_detector.get_gesture()
         print('Current gesture is {}'.format(gesture))
         time.sleep(1)
+        
