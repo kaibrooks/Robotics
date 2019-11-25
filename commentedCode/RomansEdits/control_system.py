@@ -1,15 +1,22 @@
+"""
+Import NumPy package
+Import logging package
+Import the "Robot" class from "robot_client.py"
+Import JSON package (used for storing and exchanging data)
+"""
 import numpy as np
 import logging
 from robot_client import Robot
 import json
 
+# Instantiates Logger through module-level function
 logger = logging.getLogger(__name__)
 
-
+# Function that does some linear algebra to return the unit vector (vector divided by same normalized vector)
 def get_unit_vector(vec):
     return vec / np.linalg.norm(vec)
 
-
+# Function that claculates the angle of the vector
 def calculate_angle(current_center, target_center, base_direction, current_direction):
     # build orientation unit vectors
     current_direction_unit = get_unit_vector(current_direction)
