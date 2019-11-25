@@ -1,0 +1,11 @@
+# stop all containers
+docker kill $(docker ps -q)
+
+# build and tag the docker image from Dockerfile
+# do this every time there is a change to the Dockerfile
+docker build -t tensorflow -f Dockerfile .
+
+# run the above image
+# use --detach to run in background (run silently)
+# replace ~/Documents/Git/Robotics/training_env/ with your local path
+docker run -it --rm -v ~/Documents/Git/Robotics/training_env/:/tf/notebooks -p 8888:8888 tensorflow:latest
