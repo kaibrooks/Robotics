@@ -11,7 +11,8 @@ RUN pip3 install tensorflow && \
     pip3 install numpy pandas scipy sklearn matplotlib seaborn jupyter pyyaml h5py && \
     pip3 install keras --no-deps && \
     pip3 install imutils && \
-    pip3 install Pillow
+    pip3 install Pillow && \
+    pip3 install awscli
 
 RUN mkdir -p /tf/tensorflow-tutorials && chmod -R a+rwx /tf/
 RUN mkdir /.local && chmod a+rwx /.local
