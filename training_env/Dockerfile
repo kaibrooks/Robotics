@@ -22,6 +22,7 @@ RUN pip3 install tensorflow && \
 #RUN mkdir -p /tf/tensorflow-tutorials && chmod -R a+rwx /tf/
 RUN mkdir -p /tf/training-demo && chmod -R a+rwx /tf/
 RUN mkdir -p /tf/training-demo/data && chmod -R a+rwx /tf/
+RUN mkdir -p /tf/training-demo/trained_models && chmod -R a+rwx /tf/
 
 
 RUN mkdir /.local && chmod a+rwx /.local
@@ -43,6 +44,10 @@ WORKDIR /tf/training-demo/data
 RUN wget https://github.com/kaibrooks/Robotics/raw/docker-beta/training_env/data/imageset.zip
 RUN unzip imageset.zip && rm imageset.zip
 
+# copy a pre-trained model
+WORKDIR /tf/training-demo/trained_models
+RUN wget https://github.com/kaibrooks/Robotics/blob/docker-beta/training_env/trained_models/2019-12-04_18-47-06_trainedmodel.h5 && \
+    wget https://github.com/kaibrooks/Robotics/blob/docker-beta/training_env/trained_models/2019-12-04_18-47-06_modelsummary.txt
 
 RUN apt-get autoremove -y && apt-get remove -y wget
 WORKDIR /tf
