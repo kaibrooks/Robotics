@@ -1,5 +1,6 @@
 # don't blame me
 #           -Kai
+# this is what Docker runs to build the container
 
 ARG UBUNTU_VERSION=18.04
 FROM ubuntu:${UBUNTU_VERSION} as base
@@ -15,29 +16,32 @@ RUN pip3 install tensorflow && \
     pip3 install keras --no-deps && \
     pip3 install imutils && \
     pip3 install Pillow && \
-    pip3 install awscli
+    pip3 install awscli && \
+    apt-get install unzip
 
-RUN mkdir -p /tf/tensorflow-tutorials && chmod -R a+rwx /tf/
-RUN mkdir -p /tf/cheesebot-training && chmod -R a+rwx /tf/
+#RUN mkdir -p /tf/tensorflow-tutorials && chmod -R a+rwx /tf/
+RUN mkdir -p /tf/training-demo && chmod -R a+rwx /tf/
+RUN mkdir -p /tf/training-demo/data && chmod -R a+rwx /tf/
+
 
 RUN mkdir /.local && chmod a+rwx /.local
 RUN apt-get install -y --no-install-recommends wget
-WORKDIR /tf/tensorflow-tutorials
-RUN wget https://raw.githubusercontent.com/tensorflow/docs/master/site/en/tutorials/keras/classification.ipynb
-RUN wget https://raw.githubusercontent.com/tensorflow/docs/master/site/en/tutorials/keras/overfit_and_underfit.ipynb
-RUN wget https://raw.githubusercontent.com/tensorflow/docs/master/site/en/tutorials/keras/regression.ipynb
-RUN wget https://raw.githubusercontent.com/tensorflow/docs/master/site/en/tutorials/keras/save_and_load.ipynb
-RUN wget https://raw.githubusercontent.com/tensorflow/docs/master/site/en/tutorials/keras/text_classification.ipynb
-RUN wget https://raw.githubusercontent.com/tensorflow/docs/master/site/en/tutorials/keras/text_classification_with_hub.ipynb
+#WORKDIR /tf/tensorflow-tutorials
+#RUN wget https://raw.githubusercontent.com/tensorflow/docs/master/site/en/tutorials/keras/classification.ipynb
+#RUN wget https://raw.githubusercontent.com/tensorflow/docs/master/site/en/tutorials/keras/overfit_and_underfit.ipynb
+#RUN wget https://raw.githubusercontent.com/tensorflow/docs/master/site/en/tutorials/keras/regression.ipynb
+#RUN wget https://raw.githubusercontent.com/tensorflow/docs/master/site/en/tutorials/keras/save_and_load.ipynb
+#RUN wget https://raw.githubusercontent.com/tensorflow/docs/master/site/en/tutorials/keras/text_classification.ipynb
+#RUN wget https://raw.githubusercontent.com/tensorflow/docs/master/site/en/tutorials/keras/text_classification_with_hub.ipynb
 
-WORKDIR /tf/cheesebot-training
-RUN wget https://raw.githubusercontent.com/kaibrooks/Robotics/docker-beta/training_env/cheesebotTraining.ipynb
-RUN wget https://raw.githubusercontent.com/kaibrooks/Robotics/docker-beta/training_env/imageGenerator.ipynb
+WORKDIR /tf/training-demo
+RUN wget https://raw.githubusercontent.com/kaibrooks/Robotics/docker-beta/training_env/cheesebotTraining.ipynb && \
+    wget https://raw.githubusercontent.com/kaibrooks/Robotics/docker-beta/training_env/imageGenerator.ipynb
 
-# copy image data
-#RUN curl <file_download_url> -O <copy_directory> \
-#&& unzip <copy_directory>/<filename>.zip -d <copy_directory> \
-#&& rm <copy_directory>/<filename>.zip
+# copy pictures for training, remove this for a smaller build
+WORKDIR /tf/training-demo/data
+RUN wget https://github.com/kaibrooks/Robotics/raw/docker-beta/training_env/data/imageset.zip
+RUN unzip imageset.zip && rm imageset.zip
 
 
 RUN apt-get autoremove -y && apt-get remove -y wget
