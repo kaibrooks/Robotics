@@ -1,11 +1,22 @@
-# stop all containers
-docker kill $(docker ps -q)
-
+### docker things ###
 # build and tag the docker image from Dockerfile
 # do this every time there is a change to the Dockerfile
-docker build -t tensorflow -f Dockerfile .
+docker build -t cheesebot -f Dockerfile .
 
-# run the above image
-# use --detach to run in background (run silently)
+# run the above image we just built
 # replace ~/Documents/Git/Robotics/training_env/ with your local path
-docker run -it --rm -v ~/Documents/Git/Robotics/training_env/:/tf/notebooks -p 8888:8888 tensorflow:latest
+# if you don't want it to have local access, remove ~localpath:/tf/notebooks
+docker run -it --rm -v ~/Documents/Git/Robotics/training_env/:/tf/notebooks -p 8888:8888 cheesebot:latest
+
+# if all goes well, CLI outputs a URL like below. go there
+http://127.0.0.1:8888/?token=SOMEBULLSHITHERE
+
+# stop all docker containers
+docker kill $(docker ps -q)
+
+### AWS things not related to cheesebot running ###
+# instructions for AWS docker
+https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-macOS.html
+
+# retrieve login command to use to authenticate your Docker client to your registry (needs iam creds)
+$(aws2 ecr get-login --no-include-email --region us-west-2)
