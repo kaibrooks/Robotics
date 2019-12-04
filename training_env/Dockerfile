@@ -17,9 +17,9 @@ RUN pip3 install tensorflow && \
     pip3 install imutils && \
     pip3 install Pillow && \
     pip3 install awscli && \
+    pip3 install opencv-python && \
     apt-get install unzip
 
-#RUN mkdir -p /tf/tensorflow-tutorials && chmod -R a+rwx /tf/
 RUN mkdir -p /tf/training-demo && chmod -R a+rwx /tf/
 RUN mkdir -p /tf/training-demo/data && chmod -R a+rwx /tf/
 RUN mkdir -p /tf/training-demo/trained_models && chmod -R a+rwx /tf/
@@ -27,27 +27,20 @@ RUN mkdir -p /tf/training-demo/trained_models && chmod -R a+rwx /tf/
 
 RUN mkdir /.local && chmod a+rwx /.local
 RUN apt-get install -y --no-install-recommends wget
-#WORKDIR /tf/tensorflow-tutorials
-#RUN wget https://raw.githubusercontent.com/tensorflow/docs/master/site/en/tutorials/keras/classification.ipynb
-#RUN wget https://raw.githubusercontent.com/tensorflow/docs/master/site/en/tutorials/keras/overfit_and_underfit.ipynb
-#RUN wget https://raw.githubusercontent.com/tensorflow/docs/master/site/en/tutorials/keras/regression.ipynb
-#RUN wget https://raw.githubusercontent.com/tensorflow/docs/master/site/en/tutorials/keras/save_and_load.ipynb
-#RUN wget https://raw.githubusercontent.com/tensorflow/docs/master/site/en/tutorials/keras/text_classification.ipynb
-#RUN wget https://raw.githubusercontent.com/tensorflow/docs/master/site/en/tutorials/keras/text_classification_with_hub.ipynb
 
 WORKDIR /tf/training-demo
-RUN wget https://raw.githubusercontent.com/kaibrooks/Robotics/docker-beta/training_env/cheesebotTraining.ipynb && \
-    wget https://raw.githubusercontent.com/kaibrooks/Robotics/docker-beta/training_env/imageGenerator.ipynb
+RUN wget https://raw.githubusercontent.com/kaibrooks/Robotics/demo-files/training_env/cheesebotTraining.ipynb && \
+    wget https://raw.githubusercontent.com/kaibrooks/Robotics/demo-files/training_env/imageGenerator.ipynb
 
 # copy pictures for training, remove this for a smaller build
 WORKDIR /tf/training-demo/data
-RUN wget https://github.com/kaibrooks/Robotics/raw/docker-beta/training_env/data/imageset.zip
+RUN wget https://github.com/kaibrooks/Robotics/raw/demo-files/training_env/data/imageset.zip
 RUN unzip imageset.zip && rm imageset.zip
 
 # copy a pre-trained model
 WORKDIR /tf/training-demo/trained_models
-RUN wget https://github.com/kaibrooks/Robotics/blob/docker-beta/training_env/trained_models/2019-12-04_18-47-06_trainedmodel.h5 && \
-    wget https://github.com/kaibrooks/Robotics/blob/docker-beta/training_env/trained_models/2019-12-04_18-47-06_modelsummary.txt
+RUN wget https://github.com/kaibrooks/Robotics/blob/demo-files/training_env/trained_models/2019-12-04_18-47-06_trainedmodel.h5 && \
+    wget https://github.com/kaibrooks/Robotics/blob/demo-files/training_env/trained_models/2019-12-04_18-47-06_modelsummary.txt
 
 RUN apt-get autoremove -y && apt-get remove -y wget
 WORKDIR /tf
