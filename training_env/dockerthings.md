@@ -58,19 +58,24 @@ https://docs.docker.com/engine/reference/run/
 ---
 
 # I'm a huge baby who doesn't want to use Docker
-Here's the packages Docker builds with. This probably won't work right. I haven't tested this and have no sympathy if it fails:
+Here's the packages Docker builds with. This probably won't work right. I haven't tested this and have no sympathy if it fails. Dockerfile has more details.
 <pre><code>apt-get update && apt-get install -y curl
 apt-get install -y git python3-pip
 pip3 install --upgrade pip
 apt-get install -y protobuf-compiler python-pil python-lxml python-scipy
-pip3 install tensorflow
-pip3 install numpy pandas scipy sklearn matplotlib seaborn jupyter pyyaml h5py
-pip3 install keras --no-deps
-pip3 install imutils
-pip3 install Pillow
-pip3 install awscli
-apt-get install unzip
+pip3 install tensorflow && \
+pip3 install numpy pandas scipy sklearn matplotlib seaborn jupyter pyyaml h5py && \
+pip3 install keras --no-deps && \
+pip3 install imutils && \
+pip3 install Pillow && \
+pip3 install awscli && \
+apt-get update && \
+apt-get install -y libsm6 libxext6 libxrender-dev && \
+apt-get install unzip && \
+pip3 install opencv-python
 </code></pre>
+
+...on an Ubuntu base.
 
 ---
 
