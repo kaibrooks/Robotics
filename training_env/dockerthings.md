@@ -40,6 +40,7 @@ Replace ~/Documents/Git/Robotics/training_env/ with your local path
 Go there.
 http://127.0.0.1:8888/?token=SOMEBULLSHITHERE
 
+You can run the Jupyter Notebook by clicking "Run All" from the Cell menu dropdown.
 ###### (Done)
 
 ---
