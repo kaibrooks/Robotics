@@ -17,8 +17,10 @@ RUN pip3 install tensorflow && \
     pip3 install imutils && \
     pip3 install Pillow && \
     pip3 install awscli && \
-    pip3 install opencv-python && \
-    apt-get install unzip
+    apt-get update && \
+    apt-get install -y libsm6 libxext6 libxrender-dev && \
+    apt-get install unzip && \
+    pip3 install opencv-python
 
 RUN mkdir -p /tf/training-demo && chmod -R a+rwx /tf/
 RUN mkdir -p /tf/training-demo/data && chmod -R a+rwx /tf/
@@ -48,5 +50,7 @@ WORKDIR /tf
 EXPOSE 8888
 
 RUN python3 -m ipykernel.kernelspec
+
+#RUN ["apt-get", "install", "-y", "libsm6", "libxext6", "libxrender-dev"]
 
 CMD ["jupyter", "notebook", "--allow-root", "--notebook-dir=/tf", "--ip=0.0.0.0", "--port=8888", "--no-browser"]
