@@ -85,7 +85,7 @@ class Robot:
         Parameters
         ----------
         n: int
-            steps that a robot moves(can be negative for backward)
+            steps that a robot moves
 
         Returns
         -------
@@ -107,7 +107,8 @@ class Robot:
 
 if __name__ == '__main__':
     #robot_client = Robot('Thief', '192.168.31.254', 4242)
-    robot_client = Robot('Policeman 1', '192.168.1.102', 4242)
+    print("Running")
+    robot_client = Robot('Policeman 1', '192.168.1.4', 4243)
     robot_client.connect()
     # robot_client.move_forward(1)
     robot_client.rotate(60)

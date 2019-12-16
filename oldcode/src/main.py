@@ -1,3 +1,4 @@
+from __future__ import print_function
 from camera_system import Camera
 from object_detector import Detector
 from strategy import Strategy
@@ -8,10 +9,13 @@ import sys
 import time
 import json
 import random
+import os
+# videocapture_path = r'/home/mikhail/Downloads/VideoCapture-0.9-5/Python27/DLLs_64/'
+# os.environ['path'] = videocapture_path + os.pathsep + os.environ['PATH']
 
-WEIGHT_PATH = '../model/bots-yolov3-tiny_500.weights'
-NETWORK_CONFIG_PATH = '../cfg/bots-yolov3-tiny.cfg'
-OBJECT_CONFIG_PATH = '../cfg/bots-obj.data'
+WEIGHT_PATH = '../model/custom_tiny_yolov3.weights'
+NETWORK_CONFIG_PATH = '../cfg/custom-tiny.cfg'
+OBJECT_CONFIG_PATH = '../cfg/custom.data'
 ROBOTS_CONFIG_PATH = '../cfg/robots.json'
 
 logger = logging.getLogger(__name__)
@@ -20,7 +24,7 @@ logger = logging.getLogger(__name__)
 class FakeGame:
     def __init__(self):
         self.camera = Camera(None, draw=False)
-        self.display_camera = Camera(None, window_name='labeled')
+        #self.display_camera = Camera(None, window_name='labeled')
         centers = []
         with open('centers.txt', encoding='utf-8', mode='r') as file:
             for line in file:
@@ -28,27 +32,27 @@ class FakeGame:
                 centers.append(center)
         self.centers = centers
         self.graph_builder = GraphBuilder(self.centers)
-        self.orders = ['Thief', 'Policeman 1', 'Policeman 2']
+        self.orders = ['thief', 'policeman1', 'policeman2']
         self.strategy = Strategy(self.orders)
         self.object_list = {
-            "Thief": {
+            "thief": {
                 "confidence": 0.99,
                 "center": self.centers[6],  # (width,height)
                 "size": (0.15, 0.10),  # (width,height)
             },
-            "Policeman 1": {
+            "policeman1": {
                 "confidence": 0.99,
                 "center": self.centers[1],  # (width,height)
                 "size": (0.15, 0.05),  # (width,height)
             },
-            "Policeman 2": {
+            "policeman2": {
                 "confidence": 0.99,
                 "center": self.centers[3],  # (width,height)
                 "size": (0.15, 0.05),  # (width,height)
             }
         }
         self.counter = 0
-        self.Thief_movements = [13, 14, 15, 16]
+        self.thief_movements = [13, 14, 15, 16]
         self.escape_nodes = {10}
         self.graph = None
         self.objects_on_graph = None
@@ -70,7 +74,7 @@ class FakeGame:
         instructions = self.strategy.get_next_steps_shortest_path(graph, objects_on_graph)
         logger.info('instructions:{}'.format(instructions))
 
-        # instructions['Thief'] = [objects_on_graph['Thief'], self.Thief_movements[self.counter]]
+        # instructions['thief'] = [objects_on_graph['thief'], self.thief_movements[self.counter]]
         self.instructions = instructions
 
         self.counter += 1
@@ -89,19 +93,19 @@ class FakeGame:
         Returns
         -------
         game_over: bool
-            True if the Thief is at the escape point or the policemen have caught the Thief, otherwise False.
+            True if the thief is at the escape point or the policemen have caught the thief, otherwise False.
         """
         game_over = False
         if self.instructions is None or self.objects_on_graph is None or self.graph is None:
             return game_over
-        if 'Thief' in self.objects_on_graph:
-            if self.objects_on_graph['Thief'] in self.escape_nodes:
+        if 'thief' in self.objects_on_graph:
+            if self.objects_on_graph['thief'] in self.escape_nodes:
                 game_over = True
-                logger.info('The Thief wins!')
+                logger.info('The thief wins!')
             else:
                 for name, instruction in self.instructions.items():
-                    if name != 'Thief':
-                        if self.instructions['Thief'][1] == instruction[1]:
+                    if name != 'thief':
+                        if self.instructions['thief'][1] == instruction[1]:
                             game_over = True
                             logger.info('The policemen win!')
         return game_over
@@ -127,7 +131,7 @@ class Game:
     Each game is an instance of class Game.
     """
 
-    def __init__(self, weight_path, network_config_path, object_config_path, robots_config_path):
+    def __init__(self, weight_path, robots_config_path, network_config_path=None, object_config_path=None):
         """
         Load necessary modules and files.
 
@@ -144,9 +148,9 @@ class Game:
         """
 
         # fix robot movement order
-        self.orders = ['Thief', 'Policeman 1']
-        # self.orders = ['Policeman 1', 'Policeman 2']
-        # self.orders = ['Thief', 'Policeman 1', 'Policeman 2']
+        self.orders = ['thief', 'policeman1']
+        # self.orders = ['policeman1', 'policeman2']
+        # self.orders = ['thief', 'policeman1', 'policeman2']
 
         # initialize internal states
         self.graph = None
@@ -157,13 +161,13 @@ class Game:
         self.escape_nodes = set()
 
         # construct the camera system
-        self.camera = Camera(2)
+        self.camera = Camera(1)
 
         # construct the object detector
-        self.detector = Detector(weight_path, network_config_path, object_config_path)
+        self.detector = Detector(weight_path)
 
         # load gaming board image and get centers' coordinates of triangles
-        self.gaming_board_image = self.camera.get_image()
+        self.gaming_board_image = self.camera.cap.getImage()
         self.centers = self.detector.detect_gaming_board(self.gaming_board_image)
 
         # construct the graph builder
@@ -185,19 +189,19 @@ class Game:
         Returns
         -------
         game_over: bool
-            True if the Thief is at the escape point or the policemen have caught the Thief, otherwise False.
+            True if the thief is at the escape point or the policemen have caught the thief, otherwise False.
         """
         game_over = False
         if self.instructions is None or self.objects_on_graph is None or self.graph is None:
             return game_over
-        if 'Thief' in self.objects_on_graph:
-            if self.objects_on_graph['Thief'] in self.escape_nodes:
+        if 'thief' in self.objects_on_graph:
+            if self.objects_on_graph['thief'] in self.escape_nodes:
                 game_over = True
-                logger.info('The Thief wins!')
+                logger.info('The thief wins!')
             else:
                 for name, instruction in self.instructions.items():
-                    if name != 'Thief':
-                        if self.instructions['Thief'][1] == instruction[1]:
+                    if name != 'thief':
+                        if self.instructions['thief'][1] == instruction[1]:
                             game_over = True
                             logger.info('The policemen win!')
         return game_over
@@ -274,7 +278,7 @@ class Game:
 def main():
     # set up logger level
     logger.setLevel(logging.DEBUG)
-    handler = logging.StreamHandler(sys.stdout)
+    handler = logging.FileHandler(r'/home/mikhail/Desktop/Robotics/oldcode/badrun_log.log')
     handler.setLevel(logging.DEBUG)
     logger.addHandler(handler)
 
@@ -287,13 +291,14 @@ def main():
         config = json.load(file)
 
     # load game parameters
-    weight_path = config['weight_path']
-    network_config_path = config['network_config_path']
-    object_config_path = config['object_config_path']
+    #weight_path = config['weight_path']
+    weight_path = r'/home/mikhail/Desktop/Robotics/oldcode/data/2019-12-07_23-22-17_trainedmodel.h5'
+    #network_config_path = config['network_config_path']
+    #object_config_path = config['object_config_path']
     robots_config_path = config['robots_config_path']
 
     # construct a game logic
-    game = Game(weight_path, network_config_path, object_config_path, robots_config_path)
+    game = Game(weight_path, robots_config_path)
     # game = FakeGame()
     # start the game logic
     while True:
