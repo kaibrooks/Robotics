@@ -30,16 +30,19 @@ Different settings to run the container below
 </pre></code>
 
 ######  With persistant storage, with local folder access:
-Replace ~/Documents/Git/Robotics/training_env/ with your local path
+Replace ~/Documents/Git/Robotics/training_env/ with your local path. This example connects the training_env folder on your computer to the /tf/notebooks folder inside the Docker container.
+
 <pre><code>docker run -it -v ~/Documents/Git/Robotics/training_env/:/tf/notebooks -p 8888:8888 cheesebot:latest
 </pre></code>
+You can now share files from your computer to the container through this folder connection.
+
 
 ### 4) Open Jupyter Notebook
 ###### CLI outputs a URL like below.
 Go there.
 http://127.0.0.1:8888/?token=SOMEBULLSHITHERE
 
-You can run the Jupyter Notebook by clicking "Run All" from the Cell menu dropdown.
+You can run the Jupyter Notebook by clicking "Run All" from the Cell menu dropdown. You can also choose to run each section (cell) one at a time.
 ###### (Done)
 
 
@@ -58,7 +61,7 @@ https://docs.docker.com/engine/reference/run/
 
 
 ### I need different packages than the Docker build comes with
-Modify Dockerfile and then re-build the container.
+Modify Dockerfile and then re-build the container. All you need to do is type the commands you would use to install those packages from the command line. Then rebuild the Docker container.
 
 
 ### I'm a huge baby who doesn't want to use Docker
