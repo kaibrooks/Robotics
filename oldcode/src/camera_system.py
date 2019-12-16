@@ -1,8 +1,12 @@
 import cv2
 import uuid
 import os
-
-
+import VideoCapture
+# import pygame
+# import pygame.camera
+import time, string
+from VideoCapture import Device
+from pygame.locals 
 COLORS = {
     'thief': (255, 0, 0),
     'policeman1': (0, 255, 0),
@@ -24,16 +28,16 @@ class Camera:
         self.draw = draw
         self.save = save
         self.save_path = save_path
-        self.cap = cv2.VideoCapture(camera_id)
+        self.cap = VideoCapture.Device(camera_id)
         self.num_skip = num_skip
         self.window_name = window_name
-        if self.draw:
-            cv2.namedWindow(window_name)
+        # if self.draw:
+        #     cv2.namedWindow(window_name)
 
     def __del__(self):
         self.cap.release()
-        if self.draw:
-            cv2.destroyWindow(self.window_name)
+        # if self.draw:
+        #     cv2.destroyWindow(self.window_name)
 
     def _skip_frames(self):
         for i in range(self.num_skip):

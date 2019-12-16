@@ -1,0 +1,5 @@
+classes= 3 
+train  = /home/mikhail/Desktop/cfg/bots-train.txt  
+valid  = /home/mikhail/Desktop/cfg/bots-test.txt  
+names = bots-obj.names  
+backup = backup/
