@@ -17,30 +17,22 @@ This will take ~5 minutes on first run and end with <i>Successfully tagged chees
 
 
 ### 3) Run the image
-
-Different settings to run the container below
-
-###### Without local access and resets everything to default on exit:
-<i>Run this if you don't know what you're doing since you can't screw up the files in the image</i>
-<pre><code>docker run -it --rm -p 8888:8888 cheesebot:latest
-</pre></code>
-
-###### With persistent storage, without local folder access:
-<pre><code>docker run -it -p 8888:8888 cheesebot:latest
-</pre></code>
-
-######  With persistant storage, with local folder access:
 Replace ~/Documents/Git/Robotics/training_env/ with your local path. This example connects the training_env folder on your computer to the /tf/notebooks folder inside the Docker container.
 
 <pre><code>docker run -it -v ~/Documents/Git/Robotics/training_env/:/tf/notebooks -p 8888:8888 cheesebot:latest
 </pre></code>
 You can now share files from your computer to the container through this folder connection.
 
+If you don't want Docker to have access to anything on your computer, use this instead:
+
+<pre><code>docker run -it -p 8888:8888 cheesebot:latest
+</pre></code>
+
 
 ### 4) Open Jupyter Notebook
 ###### CLI outputs a URL like below.
 Go there.
-http://127.0.0.1:8888/?token=SOMEBULLSHITHERE
+http://127.0.0.1:8888/?token=WHATEVERISHERE
 
 You can run the Jupyter Notebook by clicking "Run All" from the Cell menu dropdown. You can also choose to run each section (cell) one at a time.
 ###### (Done)
@@ -65,25 +57,7 @@ Modify Dockerfile and then re-build the container. All you need to do is type th
 
 
 ### I'm a huge baby who doesn't want to use Docker
-Here's the packages Docker builds with. This probably won't work right. I haven't tested this and have no sympathy if it fails. Dockerfile has more details.
-<pre><code>apt-get update && apt-get install -y curl
-apt-get install -y git python3-pip
-pip3 install --upgrade pip
-apt-get install -y protobuf-compiler python-pil python-lxml python-scipy
-pip3 install tensorflow && \
-pip3 install numpy pandas scipy sklearn matplotlib seaborn jupyter pyyaml h5py && \
-pip3 install keras --no-deps && \
-pip3 install imutils && \
-pip3 install Pillow && \
-pip3 install awscli && \
-apt-get update && \
-apt-get install -y libsm6 libxext6 libxrender-dev && \
-apt-get install unzip && \
-pip3 install opencv-python
-</code></pre>
-
-...on an Ubuntu base.
-
+Inside the file 'Dockerfile' is a list of all the commands Docker uses to build the environment.
 
 
 ### This is way too much work and/or too complicated
